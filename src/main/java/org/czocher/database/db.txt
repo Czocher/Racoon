@@ -1,0 +1,21 @@
+
+CREATE SCHEMA racoon;
+
+USE racoon;
+
+CREATE TABLE Clients (
+	clientid INT,
+	name VARCHAR(255),
+
+	PRIMARY KEY(clientid)
+);
+
+CREATE TABLE Orders (
+	orderid INT NOT NULL,
+	product VARCHAR(255),
+	quantity INT,
+	clientid INT,
+	
+	PRIMARY KEY (orderid),
+	FOREIGN KEY (clientid) REFERENCES Clients(clientid)
+);

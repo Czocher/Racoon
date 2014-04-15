@@ -39,6 +39,21 @@
 
 	<build>
 		<plugins>
+
+			<plugin>
+				<groupid>org.javalite</groupid>
+				<artifactid>activejdbc-instrumentation</artifactid>
+				<version>1.4.9</version>
+				<executions>
+					<execution>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>instrument</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
