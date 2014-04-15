@@ -7,19 +7,19 @@ CREATE DATABASE raccoon;
 
 USE raccoon;
 
-CREATE TABLE Clients (
-	clientid INT,
+CREATE TABLE clients (
+	clientid INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(255),
 
 	PRIMARY KEY(clientid)
 );
 
-CREATE TABLE Orders (
-	orderid INT NOT NULL,
+CREATE TABLE orders (
+	orderid INT NOT NULL AUTO_INCREMENT,
 	product VARCHAR(255),
 	quantity INT,
-	clientid INT,
+	clientid INT NOT NULL,
 	
 	PRIMARY KEY (orderid),
-	FOREIGN KEY (clientid) REFERENCES Clients(clientid)
+	FOREIGN KEY (clientid) REFERENCES clients(clientid)
 );
