@@ -1,8 +1,10 @@
-package org.czocher;
+package org.czocher.raccoon;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+
+import org.javalite.activejdbc.Base;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -17,11 +19,23 @@ public class AppDriver {
 	 */
 
 	public static void main(final String[] args) throws IOException {
+
+		openDatabaseConnection();
+		startHTTPServer();
+
+	}
+
+	private static void startHTTPServer() throws IOException {
 		final HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 8000), 0);
 		server.createContext("/myapp", new MyHandler());
 		server.setExecutor(null); // creates a default executor
 		server.start();
+
 		System.out.println("Server listening on: http:/" + server.getAddress());
+	}
+
+	private static void openDatabaseConnection() {
+		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/raccoon", "raccoon", "raccoonpasswd");
 	}
 
 	static class MyHandler implements HttpHandler {

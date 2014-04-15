@@ -1,7 +1,11 @@
 
-CREATE SCHEMA racoon;
+GRANT USAGE ON *.* TO raccoon@localhost IDENTIFIED BY 'raccoonpasswd';
 
-USE racoon;
+GRANT ALL PRIVILEGES ON raccoon.* TO raccoon@localhost ;
+
+CREATE DATABASE raccoon;
+
+USE raccoon;
 
 CREATE TABLE Clients (
 	clientid INT,
