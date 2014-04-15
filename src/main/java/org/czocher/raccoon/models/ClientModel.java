@@ -18,4 +18,6 @@ public interface ClientModel extends DataModel {
 
 	void removeOrder(OrderModel order);
 
+	ClientModel getClientById(int id);
+
 }

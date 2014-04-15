@@ -49,4 +49,9 @@ public class ClientModelImpl extends Model implements ClientModel {
 	public void remove() {
 		delete(true);
 	}
+
+	@Override
+	public ClientModel getClientById(final int id) {
+		return findById(id);
+	}
 }

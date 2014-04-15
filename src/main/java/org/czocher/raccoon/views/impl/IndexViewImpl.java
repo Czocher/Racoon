@@ -1,26 +1,36 @@
 package org.czocher.raccoon.views.impl;
 
+import java.io.IOException;
+
+import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.presenters.IndexPresenter;
 import org.czocher.raccoon.views.IndexView;
 
+import freemarker.template.Template;
+
 public class IndexViewImpl implements IndexView {
+
+	private IndexPresenter presenter;
 
 	@Override
 	public String render() {
-		// TODO Auto-generated method stub
-		return null;
+		Template template = null;
+		try {
+			template = AppDriver.TEMPL.getTemplate("index.template.ftl");
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+		return template.toString();
 	}
 
 	@Override
 	public IndexPresenter getPresenter() {
-		// TODO Auto-generated method stub
-		return null;
+		return presenter;
 	}
 
 	@Override
-	public void setPresenter(IndexPresenter presenter) {
-		// TODO Auto-generated method stub
-
+	public void setPresenter(final IndexPresenter presenter) {
+		this.presenter = presenter;
 	}
 
 }

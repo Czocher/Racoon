@@ -54,4 +54,10 @@ public class OrderModelImpl extends Model implements OrderModel {
 	public void remove() {
 		delete(true);
 	}
+
+	@Override
+	public OrderModel getOrderById(final int id) {
+		return findById(id);
+	}
+
 }
