@@ -18,7 +18,7 @@ CREATE TABLE orders (
 	orderid INT NOT NULL AUTO_INCREMENT,
 	product VARCHAR(255),
 	quantity INT,
-	clientid INT NOT NULL,
+	clientid INT,
 	
 	PRIMARY KEY (orderid),
 	FOREIGN KEY (clientid) REFERENCES clients(clientid)
