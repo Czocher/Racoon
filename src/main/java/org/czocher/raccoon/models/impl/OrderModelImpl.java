@@ -4,9 +4,11 @@ import org.czocher.raccoon.models.ClientModel;
 import org.czocher.raccoon.models.OrderModel;
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.annotations.BelongsTo;
+import org.javalite.activejdbc.annotations.IdName;
 import org.javalite.activejdbc.annotations.Table;
 
 @Table("orders")
+@IdName("orderid")
 @BelongsTo(parent = ClientModelImpl.class, foreignKeyName = "clientid")
 public class OrderModelImpl extends Model implements OrderModel {
 
@@ -41,12 +43,12 @@ public class OrderModelImpl extends Model implements OrderModel {
 	}
 
 	@Override
-	public int getIdentificator() {
+	public int getOrderId() {
 		return (int) getId();
 	}
 
 	@Override
-	public void setIdentificator(final int id) {
+	public void setOrderId(final int id) {
 		setId(id);
 	}
 

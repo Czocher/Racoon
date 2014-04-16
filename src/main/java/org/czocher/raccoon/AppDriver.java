@@ -52,7 +52,7 @@ public class AppDriver {
 	}
 
 	private static void openDatabaseConnection() {
-		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/raccoon", "raccoon", "raccoonpasswd");
+		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/raccoon?characterEncoding=utf8", "raccoon", "raccoonpasswd");
 	}
 
 	static class RequestHandler implements HttpHandler {

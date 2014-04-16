@@ -2,9 +2,9 @@ package org.czocher.raccoon.models;
 
 public interface OrderModel extends DataModel {
 
-	int getIdentificator();
+	int getOrderId();
 
-	void setIdentificator(int id);
+	void setOrderId(int id);
 
 	String getProduct();
 
@@ -19,4 +19,5 @@ public interface OrderModel extends DataModel {
 	void setClient(ClientModel clientModel);
 
 	OrderModel getOrderById(int id);
+
 }

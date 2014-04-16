@@ -3,7 +3,7 @@ GRANT USAGE ON *.* TO raccoon@localhost IDENTIFIED BY 'raccoonpasswd';
 
 GRANT ALL PRIVILEGES ON raccoon.* TO raccoon@localhost ;
 
-CREATE DATABASE raccoon;
+CREATE DATABASE raccoon DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
 USE raccoon;
 

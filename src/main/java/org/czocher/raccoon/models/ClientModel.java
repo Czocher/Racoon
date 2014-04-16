@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ClientModel extends DataModel {
 
-	int getIdentificator();
+	int getClientId();
 
-	void setIdentificator(int id);
+	void setClientId(int id);
 
 	String getName();
 
