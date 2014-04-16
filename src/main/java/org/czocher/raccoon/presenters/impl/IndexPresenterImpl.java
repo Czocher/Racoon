@@ -9,6 +9,7 @@ public class IndexPresenterImpl implements IndexPresenter {
 
 	public IndexPresenterImpl(final IndexView view) {
 		this.view = view;
+		this.view.setPresenter(this);
 	}
 
 	@Override

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Locale;
 
-import org.javalite.activejdbc.Base;
-
 import com.sun.net.httpserver.HttpServer;
 
 import freemarker.template.Configuration;
@@ -23,7 +21,6 @@ public class AppDriver {
 
 	public static void main(final String[] args) throws IOException {
 
-		openDatabaseConnection();
 		configureTemplates();
 		startHTTPServer();
 
@@ -46,7 +43,4 @@ public class AppDriver {
 		System.out.println("Server listening on: http:/" + server.getAddress() + "/");
 	}
 
-	private static void openDatabaseConnection() {
-		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/raccoon?characterEncoding=utf8", "raccoon", "raccoonpasswd");
-	}
 }

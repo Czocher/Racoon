@@ -10,11 +10,17 @@ import org.javalite.activejdbc.annotations.Table;
 @IdName("clientid")
 public class Client extends Model {
 
+	public Client() {
+		super();
+	}
+
 	public Client(final String name) {
+		super();
 		setName(name);
 	}
 
 	public Client(final String name, final boolean save) {
+		super();
 		setName(name);
 
 		if (save) {

@@ -10,12 +10,18 @@ import org.javalite.activejdbc.annotations.Table;
 @BelongsTo(parent = Client.class, foreignKeyName = "clientid")
 public class Order extends Model {
 
+	public Order() {
+		super();
+	}
+
 	public Order(final String product, final int quantity) {
+		super();
 		setProduct(product);
 		setQuantity(quantity);
 	}
 
 	public Order(final String product, final int quantity, final boolean save) {
+		super();
 		setProduct(product);
 		setQuantity(quantity);
 
