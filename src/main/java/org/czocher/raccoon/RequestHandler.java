@@ -36,6 +36,6 @@ class RequestHandler implements HttpHandler {
 
 		os.close();
 		t.close();
-		System.out.println("Request for " + uri + " handled: " + code + " " + response);
+		System.out.println("Request for " + uri + " handled: " + code);
 	}
 }

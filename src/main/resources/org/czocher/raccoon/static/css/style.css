@@ -1,0 +1,29 @@
+html,body,.container {
+	height: 100%;
+}
+
+.vertical-center-row {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.center {
+	text-align: center;
+}
+
+.contain {
+	display: table;
+	height: 40%;
+	vertical-align: middle;
+	width: 100%;
+}
+
+.logo {
+	width: 10%;
+	height: 10%;
+}
+
+.logo-text {
+	display: inline;
+	vertical-align: middle;
+}
