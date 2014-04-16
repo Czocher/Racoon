@@ -11,15 +11,18 @@ import freemarker.template.Template;
 public class IndexViewImpl implements IndexView {
 
 	private IndexPresenter presenter;
+	private Template template;
 
-	@Override
-	public String render() {
-		Template template = null;
+	public IndexViewImpl() {
 		try {
 			template = AppDriver.TEMPL.getTemplate("index.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String render() {
 		return template.toString();
 	}
 

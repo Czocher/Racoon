@@ -1,5 +1,7 @@
 package org.czocher.raccoon;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -44,7 +46,8 @@ public class AppDriver {
 
 	private static void startHTTPServer() throws IOException {
 		final HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 8000), 0);
-		server.createContext("/raccoon", new RequestHandler());
+		server.createContext("/", new RequestHandler());
+		server.createContext("/static", new StaticRequestHandler());
 		server.setExecutor(null); // creates a default executor
 		server.start();
 
@@ -64,7 +67,7 @@ public class AppDriver {
 			final String path = t.getRequestURI().getRawPath();
 
 			String response = "No URL";
-			if (path.matches("^/raccoon/index")) {
+			if (path.matches("^/" + IndexView.TAG)) {
 				if (indexView == null) {
 					indexView = new IndexViewImpl();
 				}
@@ -76,8 +79,40 @@ public class AppDriver {
 			t.sendResponseHeaders(200, response.length());
 			final OutputStream os = t.getResponseBody();
 			os.write(response.getBytes());
-			os.close();
 
+			os.close();
+			t.close();
+		}
+	}
+
+	static class StaticRequestHandler implements HttpHandler {
+
+		@Override
+		public void handle(final HttpExchange t) throws IOException {
+			final String uri = t.getRequestURI().getRawPath();
+			final OutputStream out = t.getResponseBody();
+
+			final File resourceFile = new File(AppDriver.class.getResource(uri.substring(1)).getPath());
+
+			if (!resourceFile.exists() || !resourceFile.canRead()) {
+				final String fileNotFound = "404: File not found.";
+				t.sendResponseHeaders(404, fileNotFound.length());
+				out.write(fileNotFound.getBytes());
+			} else {
+				final byte[] buffer = new byte[1000];
+				int count = 0;
+
+				t.sendResponseHeaders(200, 0);
+
+				final FileInputStream ris = new FileInputStream(resourceFile);
+				while ((count = ris.read(buffer)) > 0) {
+					out.write(buffer, 0, count);
+				}
+
+				ris.close();
+			}
+
+			out.close();
 			t.close();
 		}
 	}
