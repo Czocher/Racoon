@@ -25,14 +25,22 @@ class RequestHandler implements HttpHandler {
 		try {
 			openDatabaseConnection();
 			routeRequest(request);
+		} catch (final HTTPException e) {
+			final int responseCode = e.getCode();
+			final String responseBody = e.getBody();
+			request.sendResponseHeaders(responseCode, responseBody.length());
+			request.getResponseBody().write(responseBody.getBytes());
+			request.close();
 		} catch (final Exception e) {
 			e.printStackTrace();
+		} finally {
+			request.close();
 		}
 	}
 
-	private void routeRequest(final HttpExchange request) throws IOException {
+	private void routeRequest(final HttpExchange request) throws IOException, HTTPException {
 		final String uri = request.getRequestURI().getRawPath();
-		int code = 200;
+		final int code = 200;
 		String response;
 
 		if (uri.matches("^/" + IndexView.TAG)) {
@@ -47,8 +55,7 @@ class RequestHandler implements HttpHandler {
 
 			response = new ClientListPresenterImpl(clientListView, Client.findAll()).go();
 		} else {
-			response = "404: File not found.";
-			code = 404;
+			throw new HTTPException(404, "404: File not found.");
 		}
 
 		request.sendResponseHeaders(code, response.length());
