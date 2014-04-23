@@ -21,17 +21,17 @@ class RequestHandler implements HttpHandler {
 	private ClientListView clientListView;
 
 	@Override
-	public void handle(final HttpExchange t) throws IOException {
+	public void handle(final HttpExchange request) throws IOException {
 		try {
 			openDatabaseConnection();
-			routeRequest(t);
+			routeRequest(request);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void routeRequest(final HttpExchange t) throws IOException {
-		final String uri = t.getRequestURI().getRawPath();
+	private void routeRequest(final HttpExchange request) throws IOException {
+		final String uri = request.getRequestURI().getRawPath();
 		int code = 200;
 		String response;
 
@@ -45,23 +45,18 @@ class RequestHandler implements HttpHandler {
 				clientListView = new ClientListViewImpl();
 			}
 
-			try {
-				Client.findById(1).toString();
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
 			response = new ClientListPresenterImpl(clientListView, Client.findAll()).go();
 		} else {
 			response = "404: File not found.";
 			code = 404;
 		}
 
-		t.sendResponseHeaders(code, response.length());
-		final OutputStream os = t.getResponseBody();
+		request.sendResponseHeaders(code, response.length());
+		final OutputStream os = request.getResponseBody();
 		os.write(response.getBytes());
 
 		os.close();
-		t.close();
+		request.close();
 		System.out.println("Request for " + uri + " handled: " + code);
 	}
 
