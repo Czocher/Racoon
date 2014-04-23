@@ -25,18 +25,11 @@
 			</div>
 		</div>
 		<div class="contain">
-			<div class="row vertical-center-row">
-				<div class="col-md-6 center">
-					<a class="btn btn-primary btn-lg btn-block" href="clients">
-						<span class="glyphicon glyphicon-user "></span> Show client list
-					</a>
-				</div>
-				<div class="col-md-6 center">
-					<a class="btn btn-primary btn-lg btn-block" href="orders">
-						<span class="glyphicon glyphicon-shopping-cart"></span> Show order
-						list
-					</a>
-				</div>
+			<h1>List of clients:</h1>
+			<div class="list-group">
+				<#list clientList as item>
+					<a href="/client?id=${item.id}" class="list-group-item">${item.id}. ${item.name}</a>
+				</#list>
 			</div>
 		</div>
 	</div>
