@@ -1,30 +1,5 @@
-<!doctype html>
-
-<html lang="en">
-<head>
-<meta charset="utf-8">
-
-<title>Racoon Shop</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="static/css/bootstrap.css">
-<link rel="stylesheet" href="static/css/style.css">
-</head>
-
-<body>
-
-	<div class="container">
-		<div class="contain">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="jumbotron center">
-						<h1 class="logo-text"><a href="/index">Raccoon Shop</a></h1>
-						<img src="static/logo.png" class="logo" />
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="contain">
+<#import "master.template.ftl" as m>
+<@m.template>
 			<h1>List of clients:</h1>
 			<div class="list-group">
 				<#if clientList?has_content>
@@ -36,7 +11,4 @@
 				</#if>
 				<a href="/add/client" class="list-group-item active center"><span class="glyphicon glyphicon-plus"></span> Add client</a>
 			</div>
-		</div>
-	</div>
-</body>
-</html>
+</@m.template>
