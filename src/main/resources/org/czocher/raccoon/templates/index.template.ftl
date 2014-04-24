@@ -18,7 +18,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="jumbotron center">
-						<h1 class="logo-text">Raccoon Shop</h1>
+						<h1 class="logo-text"><a href="/index">Raccoon Shop</a></h1>
 						<img src="static/logo.png" class="logo" />
 					</div>
 				</div>
