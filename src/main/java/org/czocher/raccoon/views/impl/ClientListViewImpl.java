@@ -31,10 +31,7 @@ public class ClientListViewImpl implements ClientListView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		if (presenter.getClientList() == null || presenter.getClientList().isEmpty()) {
-			values.put("clientListEmpty", true);
-		} else {
-			values.put("clientListEmpty", false);
+		if (presenter.getClientList() != null && !presenter.getClientList().isEmpty()) {
 			values.put("clientList", presenter.getClientList());
 		}
 
