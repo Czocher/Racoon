@@ -27,12 +27,12 @@
 		<div class="contain">
 			<h1>List of clients:</h1>
 			<div class="list-group">
-			<#if clientList??>
+			<#if clientList?has_content>
 				<#list clientList as item>
 					<a href="/client?id=${item.id}" class="list-group-item">${item.id}. ${item.name}</a>
 				</#list>
 			<#else>
-				<div href="#" class="list-group-item">No clients specified.</div>
+				<div class="list-group-item">No clients specified.</div>
 			</#if>
 			</div>
 		</div>
