@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.czocher.raccoon.models.Client;
+import org.czocher.raccoon.models.Order;
 import org.czocher.raccoon.presenters.impl.ClientListPresenterImpl;
 import org.czocher.raccoon.presenters.impl.IndexPresenterImpl;
+import org.czocher.raccoon.presenters.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.views.ClientListView;
 import org.czocher.raccoon.views.IndexView;
+import org.czocher.raccoon.views.OrderListView;
 import org.czocher.raccoon.views.impl.ClientListViewImpl;
 import org.czocher.raccoon.views.impl.IndexViewImpl;
+import org.czocher.raccoon.views.impl.OrderListViewImpl;
 import org.javalite.activejdbc.Base;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -19,6 +23,7 @@ class RequestHandler implements HttpHandler {
 
 	private IndexView indexView;
 	private ClientListView clientListView;
+	private OrderListView orderListView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -54,6 +59,12 @@ class RequestHandler implements HttpHandler {
 			}
 
 			response = new ClientListPresenterImpl(clientListView, Client.findAll()).go();
+		} else if (uri.matches("^/" + OrderListView.TAG)) {
+			if (orderListView == null) {
+				orderListView = new OrderListViewImpl();
+			}
+
+			response = new OrderListPresenterImpl(orderListView, Order.findAll()).go();
 		} else {
 			throw new HTTPException(404, "404: File not found.");
 		}

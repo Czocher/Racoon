@@ -7,20 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.ClientListPresenter;
-import org.czocher.raccoon.views.ClientListView;
+import org.czocher.raccoon.presenters.OrderListPresenter;
+import org.czocher.raccoon.views.OrderListView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ClientListViewImpl implements ClientListView {
+public class OrderListViewImpl implements OrderListView {
 
-	private ClientListPresenter presenter;
+	private OrderListPresenter presenter;
 	private Template template;
 
-	public ClientListViewImpl() {
+	public OrderListViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("clientList.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("orderList.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -31,7 +31,7 @@ public class ClientListViewImpl implements ClientListView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("clientList", presenter.getClientList());
+		values.put("orderList", presenter.getOrderList());
 
 		try {
 			template.process(values, out);
@@ -43,12 +43,12 @@ public class ClientListViewImpl implements ClientListView {
 	}
 
 	@Override
-	public ClientListPresenter getPresenter() {
+	public OrderListPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final ClientListPresenter presenter) {
+	public void setPresenter(final OrderListPresenter presenter) {
 		this.presenter = presenter;
 	}
 

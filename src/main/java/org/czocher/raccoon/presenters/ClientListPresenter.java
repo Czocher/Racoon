@@ -6,8 +6,8 @@ import org.czocher.raccoon.models.Client;
 
 public interface ClientListPresenter extends Presenter {
 
-	public List<Client> getClientList();
+	List<Client> getClientList();
 
-	public void setClientList(final List<Client> clientList);
+	void setClientList(final List<Client> clientList);
 
 }
