@@ -1,14 +1,33 @@
 <#import "master.template.ftl" as m>
 <@m.template>
 			<h1>List of clients:</h1>
-			<div class="list-group">
-				<#if clientList?has_content>
-					<#list clientList as item>
-						<a href="/client?id=${item.id}" class="list-group-item">${item.id}. ${item.name}</a>
-					</#list>
-				<#else>
-					<div class="list-group-item">No clients specified.</div>
-				</#if>
-				<a href="/add/client" class="list-group-item active center"><span class="glyphicon glyphicon-plus"></span> Add client</a>
-			</div>
+			<#if clientList?has_content>
+				<table class="table table-hover table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list clientList as item>
+							<tr data-type="link" href="client?id=${item.id}">
+								<td>${item.id}</td>
+								<td>${item.name}</td>
+							</tr>
+						</#list>
+					</tbody>
+				</table>
+				<script>
+					$(document).ready(function(){
+						$("[data-type='link']").click(function(){
+							document.location.href = $(this).attr('href');
+						});
+					});
+				</script>
+			<#else>
+				<div class="list-group-item">No clients specified.</div>
+			</#if>
+		
+			<a href="/add/client" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add client</a>
 </@m.template>
