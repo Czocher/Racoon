@@ -1,5 +1,8 @@
 package org.czocher.raccoon.models;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.annotations.BelongsTo;
 import org.javalite.activejdbc.annotations.IdName;
@@ -14,52 +17,34 @@ public class Order extends Model {
 		super();
 	}
 
-	public Order(final String product, final int quantity) {
+	public Order(final OrderItem orderItem) {
 		super();
-		setProduct(product);
-		setQuantity(quantity);
+		addOrderItem(orderItem);
 	}
 
-	public Order(final String product, final int quantity, final boolean save) {
+	public Order(final OrderItem orderItem, final boolean save) {
 		super();
-		setProduct(product);
-		setQuantity(quantity);
+		addOrderItem(orderItem);
 
 		if (save) {
 			saveIt();
 		}
 	}
 
-	public Order(final String product, final int quantity, final Client client) {
-		setProduct(product);
-		setQuantity(quantity);
-		setClient(client);
+	public void addOrderItem(final OrderItem orderItem) {
+		add(orderItem);
 	}
 
-	public Order(final String product, final int quantity, final Client client, final boolean save) {
-		setProduct(product);
-		setQuantity(quantity);
-		setClient(client);
-
-		if (save) {
-			saveIt();
-		}
+	public List<OrderItem> getOrderItems() {
+		return getAll(OrderItem.class);
 	}
 
-	public String getProduct() {
-		return getString("product");
+	public Timestamp getOrderTimestamp() {
+		return getTimestamp("timestamp");
 	}
 
-	public void setProduct(final String product) {
-		set("product", product);
-	}
-
-	public int getQuantity() {
-		return getInteger("quantity");
-	}
-
-	public void setQuantity(final int quantity) {
-		setInteger("quantity", quantity);
+	public void setOrderTimestamp(final Timestamp timestamp) {
+		setTimestamp("timestamp", timestamp);
 	}
 
 	public Client getClient() {
@@ -69,5 +54,4 @@ public class Order extends Model {
 	public void setClient(final Client client) {
 		setParent(client);
 	}
-
 }

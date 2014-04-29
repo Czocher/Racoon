@@ -9,17 +9,35 @@ USE raccoon;
 
 CREATE TABLE clients (
 	clientid INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255),
+	name VARCHAR(255) NOT NULL,
 
 	PRIMARY KEY(clientid)
 );
 
 CREATE TABLE orders (
 	orderid INT NOT NULL AUTO_INCREMENT,
-	product VARCHAR(255),
-	quantity INT,
-	clientid INT,
+	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	clientid INT NOT NULL,
 	
 	PRIMARY KEY (orderid),
 	FOREIGN KEY (clientid) REFERENCES clients(clientid)
+);
+
+CREATE TABLE products (
+	productid INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR(255),
+	
+	PRIMARY KEY (productid)
+);
+
+
+CREATE TABLE orderitems (
+	orderitemid INT NOT NULL AUTO_INCREMENT,
+	productid INT,
+	orderid INT,
+	quantity INT,
+	
+	PRIMARY KEY (orderitemid),
+	FOREIGN KEY (productid) REFERENCES products(productid),
+	FOREIGN KEY (orderid) REFERENCES orders(orderid)
 );

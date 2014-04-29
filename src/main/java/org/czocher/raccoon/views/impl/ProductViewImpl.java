@@ -7,36 +7,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.IndexPresenter;
-import org.czocher.raccoon.views.ClientListView;
-import org.czocher.raccoon.views.IndexView;
-import org.czocher.raccoon.views.OrderListView;
-import org.czocher.raccoon.views.ProductListView;
+import org.czocher.raccoon.HTTPException;
+import org.czocher.raccoon.presenters.ProductPresenter;
+import org.czocher.raccoon.views.ProductView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class IndexViewImpl implements IndexView {
+public class ProductViewImpl implements ProductView {
 
-	private IndexPresenter presenter;
+	private ProductPresenter presenter;
 	private Template template;
 
-	public IndexViewImpl() {
+	public ProductViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("index.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("product.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public String render() {
+	public String render() throws HTTPException {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("clientListPath", ClientListView.TAG);
-		values.put("orderListPath", OrderListView.TAG);
-		values.put("productListPath", ProductListView.TAG);
+		if (presenter.getProduct() != null) {
+			values.put("product", presenter.getProduct());
+		} else {
+			throw new HTTPException(404, "File not found.");
+		}
 
 		try {
 			template.process(values, out);
@@ -48,12 +48,12 @@ public class IndexViewImpl implements IndexView {
 	}
 
 	@Override
-	public IndexPresenter getPresenter() {
+	public ProductPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final IndexPresenter presenter) {
+	public void setPresenter(final ProductPresenter presenter) {
 		this.presenter = presenter;
 	}
 

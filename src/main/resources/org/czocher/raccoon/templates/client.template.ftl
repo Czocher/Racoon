@@ -10,8 +10,7 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Product</th>
-					<th>Quantity</th>
+					<th>Order date</th>
 					<th>Client name</th>
 				</tr>
 			</thead>
@@ -19,9 +18,8 @@
 				<#list client.getOrders() as item>
 					<tr data-type="link" href="/${orderPath}?id=${item.id}">
 						<td>${item.id}</td>
-						<td>${item.product}</td>
-						<td>${item.quantity}</td>
-						<td>${item.getClient().name}</td>
+						<td>${item.timestamp}</td>
+						<td>${item.client.name}</td>
 					</tr>
 				</#list>
 			</tbody>

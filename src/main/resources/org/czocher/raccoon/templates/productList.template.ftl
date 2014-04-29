@@ -1,21 +1,19 @@
 <#import "master.template.ftl" as m>
 <@m.template>
-			<h1>List of orders:</h1>
-			<#if orderList?has_content>
+			<h1>List of products:</h1>
+			<#if productList?has_content>
 				<table class="table table-hover table-striped">
 					<thead>
 						<tr>
 							<th>#</th>
-							<th>Order date</th>
-							<th>Client name</th>
+							<th>Name</th>
 						</tr>
 					</thead>
 					<tbody>
-						<#list orderList as item>
-							<tr data-type="link" href="/${orderPath}?id=${item.id}">
+						<#list productList as item>
+							<tr data-type="link" href="/${productPath}?id=${item.id}">
 								<td>${item.id}</td>
-								<td>${item.timestamp}</td>
-								<td>${item.getClient().getName()}</td>
+								<td>${item.name}</td>
 							</tr>
 						</#list>
 					</tbody>
@@ -28,9 +26,9 @@
 					});
 				</script>
 			<#else>
-				<div class="list-group-item">No orders specified.</div>
+				<div class="list-group-item">No products specified.</div>
 			</#if>
 				
-			<a href="/add/order" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add order</a>
+			<a href="/add/order" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add product</a>
 			
 </@m.template>

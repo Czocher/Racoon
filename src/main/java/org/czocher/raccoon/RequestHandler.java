@@ -9,18 +9,25 @@ import java.util.Map;
 
 import org.czocher.raccoon.models.Client;
 import org.czocher.raccoon.models.Order;
+import org.czocher.raccoon.models.Product;
 import org.czocher.raccoon.presenters.impl.ClientListPresenterImpl;
 import org.czocher.raccoon.presenters.impl.ClientPresenterImpl;
 import org.czocher.raccoon.presenters.impl.IndexPresenterImpl;
 import org.czocher.raccoon.presenters.impl.OrderListPresenterImpl;
+import org.czocher.raccoon.presenters.impl.ProductListPresenterImpl;
+import org.czocher.raccoon.presenters.impl.ProductPresenterImpl;
 import org.czocher.raccoon.views.ClientListView;
 import org.czocher.raccoon.views.ClientView;
 import org.czocher.raccoon.views.IndexView;
 import org.czocher.raccoon.views.OrderListView;
+import org.czocher.raccoon.views.ProductListView;
+import org.czocher.raccoon.views.ProductView;
 import org.czocher.raccoon.views.impl.ClientListViewImpl;
 import org.czocher.raccoon.views.impl.ClientViewImpl;
 import org.czocher.raccoon.views.impl.IndexViewImpl;
 import org.czocher.raccoon.views.impl.OrderListViewImpl;
+import org.czocher.raccoon.views.impl.ProductListViewImpl;
+import org.czocher.raccoon.views.impl.ProductViewImpl;
 import org.javalite.activejdbc.Base;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -35,6 +42,8 @@ class RequestHandler implements HttpHandler {
 	private ClientListView clientListView;
 	private OrderListView orderListView;
 	private ClientView clientView;
+	private ProductListViewImpl productListView;
+	private ProductViewImpl productView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -87,6 +96,12 @@ class RequestHandler implements HttpHandler {
 			}
 
 			response = new ClientListPresenterImpl(clientListView, Client.findAll()).go();
+		} else if (uri.matches("^/" + ProductListView.TAG)) {
+			if (productListView == null) {
+				productListView = new ProductListViewImpl();
+			}
+
+			response = new ProductListPresenterImpl(productListView, Product.findAll()).go();
 		} else if (uri.matches("^/" + OrderListView.TAG)) {
 			if (orderListView == null) {
 				orderListView = new OrderListViewImpl();
@@ -106,11 +121,24 @@ class RequestHandler implements HttpHandler {
 			}
 
 			response = new ClientPresenterImpl(clientView, Client.findById(id)).go();
+		} else if (uri.matches("^/" + ProductView.TAG)) {
+			if (productView == null) {
+				productView = new ProductViewImpl();
+			}
+
+			int id = 0;
+			try {
+				id = Integer.parseInt((String) params.get("id"));
+			} catch (final NumberFormatException e) {
+				throw new HTTPException(404, "File not found.");
+			}
+
+			response = new ProductPresenterImpl(productView, Product.findById(id)).go();
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
 
-		request.sendResponseHeaders(code, response.length());
+		request.sendResponseHeaders(code, response.getBytes().length);
 		final OutputStream os = request.getResponseBody();
 		os.write(response.getBytes());
 

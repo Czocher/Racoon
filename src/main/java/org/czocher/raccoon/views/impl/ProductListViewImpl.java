@@ -7,23 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.IndexPresenter;
-import org.czocher.raccoon.views.ClientListView;
-import org.czocher.raccoon.views.IndexView;
-import org.czocher.raccoon.views.OrderListView;
+import org.czocher.raccoon.presenters.ProductListPresenter;
 import org.czocher.raccoon.views.ProductListView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class IndexViewImpl implements IndexView {
+public class ProductListViewImpl implements ProductListView {
 
-	private IndexPresenter presenter;
+	private ProductListPresenter presenter;
 	private Template template;
 
-	public IndexViewImpl() {
+	public ProductListViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("index.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("productList.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -34,9 +31,10 @@ public class IndexViewImpl implements IndexView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("clientListPath", ClientListView.TAG);
-		values.put("orderListPath", OrderListView.TAG);
-		values.put("productListPath", ProductListView.TAG);
+		// TODO: uncomment when the need arises
+		// values.put("productPath", ProductView.TAG);
+		values.put("productPath", "show/product");
+		values.put("productList", presenter.getProductList());
 
 		try {
 			template.process(values, out);
@@ -48,12 +46,12 @@ public class IndexViewImpl implements IndexView {
 	}
 
 	@Override
-	public IndexPresenter getPresenter() {
+	public ProductListPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final IndexPresenter presenter) {
+	public void setPresenter(final ProductListPresenter presenter) {
 		this.presenter = presenter;
 	}
 
