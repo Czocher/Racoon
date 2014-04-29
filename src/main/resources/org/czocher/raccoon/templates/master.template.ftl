@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/static/css/bootstrap.css">
 <link rel="stylesheet" href="/static/css/style.css">
 <script src="/static/js/jquery-1.11.0.min.js"></script>
+<script src="/static/js/jquery.validate.min.js"></script>
 </head>
 
 <body>
