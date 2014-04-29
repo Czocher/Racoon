@@ -181,10 +181,8 @@ class RequestHandler implements HttpHandler {
 			if (clientView == null) {
 				clientView = new ClientViewImpl();
 			}
-			System.out.println(params);
-			System.out.println(request.getRequestMethod());
 			if (request.getRequestMethod().equals("POST")) {
-				if (!params.containsKey("name")) {
+				if (!params.containsKey("name") || params.get("name") == null || params.get("name").toString().isEmpty()) {
 					throw new HTTPException(400, "Bad request.");
 				}
 
