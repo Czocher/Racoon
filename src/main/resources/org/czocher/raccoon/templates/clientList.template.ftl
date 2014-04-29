@@ -29,5 +29,5 @@
 				<div class="list-group-item">No clients specified.</div>
 			</#if>
 		
-			<a href="/add/client" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add client</a>
+			<a href="/${newClientPath}" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add client</a>
 </@m.template>

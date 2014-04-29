@@ -9,6 +9,7 @@ import java.util.Map;
 import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.presenters.OrderListPresenter;
 import org.czocher.raccoon.views.OrderListView;
+import org.czocher.raccoon.views.OrderView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -31,9 +32,7 @@ public class OrderListViewImpl implements OrderListView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		// TODO: uncomment when the need arises
-		// values.put("orderPath", OrderView.TAG);
-		values.put("orderPath", "show/order");
+		values.put("orderPath", OrderView.TAG);
 		values.put("orderList", presenter.getOrderList());
 
 		try {

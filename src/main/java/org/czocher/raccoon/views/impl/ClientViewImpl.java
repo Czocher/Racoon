@@ -10,6 +10,7 @@ import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.ClientPresenter;
 import org.czocher.raccoon.views.ClientView;
+import org.czocher.raccoon.views.OrderView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -38,8 +39,7 @@ public class ClientViewImpl implements ClientView {
 			throw new HTTPException(404, "File not found.");
 		}
 
-		// TODO: change to the TAG
-		values.put("orderPath", "show/order");
+		values.put("orderPath", OrderView.TAG);
 
 		try {
 			template.process(values, out);

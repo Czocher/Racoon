@@ -7,33 +7,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.ProductListPresenter;
-import org.czocher.raccoon.views.ProductListView;
-import org.czocher.raccoon.views.ProductView;
+import org.czocher.raccoon.HTTPException;
+import org.czocher.raccoon.presenters.NewClientPresenter;
+import org.czocher.raccoon.views.NewClientView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ProductListViewImpl implements ProductListView {
+public class NewClientViewImpl implements NewClientView {
 
-	private ProductListPresenter presenter;
+	private NewClientPresenter presenter;
 	private Template template;
 
-	public ProductListViewImpl() {
+	public NewClientViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("productList.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("newClient.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public String render() {
+	public String render() throws HTTPException {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("productPath", ProductView.TAG);
-		values.put("productList", presenter.getProductList());
+		values.put("newClientPath", NewClientView.TAG);
 
 		try {
 			template.process(values, out);
@@ -45,12 +44,12 @@ public class ProductListViewImpl implements ProductListView {
 	}
 
 	@Override
-	public ProductListPresenter getPresenter() {
+	public NewClientPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final ProductListPresenter presenter) {
+	public void setPresenter(final NewClientPresenter presenter) {
 		this.presenter = presenter;
 	}
 

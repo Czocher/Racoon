@@ -14,6 +14,7 @@ import org.czocher.raccoon.models.Product;
 import org.czocher.raccoon.presenters.impl.ClientListPresenterImpl;
 import org.czocher.raccoon.presenters.impl.ClientPresenterImpl;
 import org.czocher.raccoon.presenters.impl.IndexPresenterImpl;
+import org.czocher.raccoon.presenters.impl.NewClientPresenterImpl;
 import org.czocher.raccoon.presenters.impl.OrderItemPresenterImpl;
 import org.czocher.raccoon.presenters.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.presenters.impl.OrderPresenterImpl;
@@ -22,6 +23,7 @@ import org.czocher.raccoon.presenters.impl.ProductPresenterImpl;
 import org.czocher.raccoon.views.ClientListView;
 import org.czocher.raccoon.views.ClientView;
 import org.czocher.raccoon.views.IndexView;
+import org.czocher.raccoon.views.NewClientView;
 import org.czocher.raccoon.views.OrderItemView;
 import org.czocher.raccoon.views.OrderListView;
 import org.czocher.raccoon.views.OrderView;
@@ -30,6 +32,7 @@ import org.czocher.raccoon.views.ProductView;
 import org.czocher.raccoon.views.impl.ClientListViewImpl;
 import org.czocher.raccoon.views.impl.ClientViewImpl;
 import org.czocher.raccoon.views.impl.IndexViewImpl;
+import org.czocher.raccoon.views.impl.NewClientViewImpl;
 import org.czocher.raccoon.views.impl.OrderItemViewImpl;
 import org.czocher.raccoon.views.impl.OrderListViewImpl;
 import org.czocher.raccoon.views.impl.OrderViewImpl;
@@ -53,6 +56,7 @@ class RequestHandler implements HttpHandler {
 	private ProductViewImpl productView;
 	private OrderViewImpl orderView;
 	private OrderItemViewImpl orderItemView;
+	private NewClientViewImpl newClientView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -169,6 +173,29 @@ class RequestHandler implements HttpHandler {
 			}
 
 			response = new OrderItemPresenterImpl(orderItemView, OrderItem.findById(id)).go();
+		} else if (uri.matches("^/" + NewClientView.TAG)) {
+			Client n;
+			if (newClientView == null) {
+				newClientView = new NewClientViewImpl();
+			}
+			if (clientView == null) {
+				clientView = new ClientViewImpl();
+			}
+			System.out.println(params);
+			System.out.println(request.getRequestMethod());
+			if (request.getRequestMethod().equals("POST")) {
+				if (!params.containsKey("name")) {
+					throw new HTTPException(400, "Bad request.");
+				}
+
+				n = new Client(params.get("name").toString());
+				n.saveIt();
+
+				response = new ClientPresenterImpl(clientView, n).go();
+			} else {
+				response = new NewClientPresenterImpl(newClientView).go();
+			}
+
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}

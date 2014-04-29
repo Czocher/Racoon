@@ -10,6 +10,7 @@ import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.presenters.ClientListPresenter;
 import org.czocher.raccoon.views.ClientListView;
 import org.czocher.raccoon.views.ClientView;
+import org.czocher.raccoon.views.NewClientView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -33,6 +34,7 @@ public class ClientListViewImpl implements ClientListView {
 		final Map<String, Object> values = new HashMap<>();
 
 		values.put("clientPath", ClientView.TAG);
+		values.put("newClientPath", NewClientView.TAG);
 		values.put("clientList", presenter.getClientList());
 
 		try {
