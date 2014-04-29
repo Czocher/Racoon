@@ -16,7 +16,7 @@ class StaticRequestHandler implements HttpHandler {
 		final String uri = t.getRequestURI().getRawPath();
 		final OutputStream out = t.getResponseBody();
 		final URL url = AppDriver.class.getResource(uri.substring(1));
-		final String fileNotFound = "404: File not found.";
+		final String fileNotFound = "File not found.";
 
 		if (url == null) {
 

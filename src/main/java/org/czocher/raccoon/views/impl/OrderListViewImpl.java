@@ -31,6 +31,9 @@ public class OrderListViewImpl implements OrderListView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
+		// TODO: uncomment when the need arises
+		// values.put("orderPath", OrderView.TAG);
+		values.put("orderPath", "show/order");
 		values.put("orderList", presenter.getOrderList());
 
 		try {

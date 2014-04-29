@@ -33,8 +33,8 @@ public class IndexViewImpl implements IndexView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("clients", ClientListView.TAG);
-		values.put("orders", OrderListView.TAG);
+		values.put("clientListPath", ClientListView.TAG);
+		values.put("orderListPath", OrderListView.TAG);
 
 		try {
 			template.process(values, out);

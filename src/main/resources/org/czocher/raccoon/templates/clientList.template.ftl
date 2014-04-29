@@ -11,7 +11,7 @@
 					</thead>
 					<tbody>
 						<#list clientList as item>
-							<tr data-type="link" href="client?id=${item.id}">
+							<tr data-type="link" href="/${clientPath}?id=${item.id}">
 								<td>${item.id}</td>
 								<td>${item.name}</td>
 							</tr>

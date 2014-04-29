@@ -4,7 +4,7 @@ import org.czocher.raccoon.presenters.ClientListPresenter;
 
 public interface ClientListView extends View {
 
-	static String TAG = "clients";
+	static String TAG = "show/clients";
 
 	ClientListPresenter getPresenter();
 

@@ -1,5 +1,6 @@
 package org.czocher.raccoon.presenters.impl;
 
+import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.IndexPresenter;
 import org.czocher.raccoon.views.IndexView;
 
@@ -13,7 +14,7 @@ public class IndexPresenterImpl implements IndexPresenter {
 	}
 
 	@Override
-	public String go() {
+	public String go() throws HTTPException {
 		return view.render();
 	}
 

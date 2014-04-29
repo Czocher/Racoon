@@ -7,33 +7,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.ClientListPresenter;
-import org.czocher.raccoon.views.ClientListView;
+import org.czocher.raccoon.HTTPException;
+import org.czocher.raccoon.presenters.ClientPresenter;
 import org.czocher.raccoon.views.ClientView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ClientListViewImpl implements ClientListView {
+public class ClientViewImpl implements ClientView {
 
-	private ClientListPresenter presenter;
+	private ClientPresenter presenter;
 	private Template template;
 
-	public ClientListViewImpl() {
+	public ClientViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("clientList.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("client.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public String render() {
+	public String render() throws HTTPException {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("clientPath", ClientView.TAG);
-		values.put("clientList", presenter.getClientList());
+		if (presenter.getClient() != null) {
+			values.put("client", presenter.getClient());
+		} else {
+			throw new HTTPException(404, "File not found.");
+		}
+
+		// TODO: change to the TAG
+		values.put("orderPath", "show/order");
 
 		try {
 			template.process(values, out);
@@ -45,12 +51,12 @@ public class ClientListViewImpl implements ClientListView {
 	}
 
 	@Override
-	public ClientListPresenter getPresenter() {
+	public ClientPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final ClientListPresenter presenter) {
+	public void setPresenter(final ClientPresenter presenter) {
 		this.presenter = presenter;
 	}
 

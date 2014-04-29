@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Locale;
 
+import org.czocher.raccoon.utils.ParameterFilter;
+
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpServer;
 
 import freemarker.template.Configuration;
@@ -35,8 +38,12 @@ public class AppDriver {
 
 	private static void startHTTPServer() throws IOException {
 		final HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 8000), 0);
-		server.createContext("/", new RequestHandler());
+
+		final HttpContext context = server.createContext("/", new RequestHandler());
+		context.getFilters().add(new ParameterFilter());
+
 		server.createContext("/static", new StaticRequestHandler());
+
 		server.setExecutor(null); // creates a default executor
 		server.start();
 

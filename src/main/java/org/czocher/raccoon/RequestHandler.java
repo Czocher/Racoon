@@ -2,16 +2,23 @@ package org.czocher.raccoon;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.czocher.raccoon.models.Client;
 import org.czocher.raccoon.models.Order;
 import org.czocher.raccoon.presenters.impl.ClientListPresenterImpl;
+import org.czocher.raccoon.presenters.impl.ClientPresenterImpl;
 import org.czocher.raccoon.presenters.impl.IndexPresenterImpl;
 import org.czocher.raccoon.presenters.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.views.ClientListView;
+import org.czocher.raccoon.views.ClientView;
 import org.czocher.raccoon.views.IndexView;
 import org.czocher.raccoon.views.OrderListView;
 import org.czocher.raccoon.views.impl.ClientListViewImpl;
+import org.czocher.raccoon.views.impl.ClientViewImpl;
 import org.czocher.raccoon.views.impl.IndexViewImpl;
 import org.czocher.raccoon.views.impl.OrderListViewImpl;
 import org.javalite.activejdbc.Base;
@@ -19,11 +26,15 @@ import org.javalite.activejdbc.Base;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
 class RequestHandler implements HttpHandler {
 
 	private IndexView indexView;
 	private ClientListView clientListView;
 	private OrderListView orderListView;
+	private ClientView clientView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -31,11 +42,7 @@ class RequestHandler implements HttpHandler {
 			openDatabaseConnection();
 			routeRequest(request);
 		} catch (final HTTPException e) {
-			final int responseCode = e.getCode();
-			final String responseBody = e.getBody();
-			request.sendResponseHeaders(responseCode, responseBody.length());
-			request.getResponseBody().write(responseBody.getBytes());
-			request.close();
+			handleError(request, e);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -43,8 +50,29 @@ class RequestHandler implements HttpHandler {
 		}
 	}
 
+	private void handleError(final HttpExchange request, final HTTPException e) throws IOException {
+		final Template template = AppDriver.TEMPL.getTemplate("error.template.ftl");
+		final Map<String, Object> values = new HashMap<>();
+		final Writer out = new StringWriter();
+
+		values.put("code", e.getCode());
+		values.put("message", e.getBody());
+
+		try {
+			template.process(values, out);
+		} catch (final TemplateException e1) {
+			e1.printStackTrace();
+		}
+
+		request.sendResponseHeaders(e.getCode(), 0);
+		request.getResponseBody().write(out.toString().getBytes());
+		request.close();
+	}
+
 	private void routeRequest(final HttpExchange request) throws IOException, HTTPException {
 		final String uri = request.getRequestURI().getRawPath();
+		@SuppressWarnings("unchecked")
+		final Map<String, Object> params = (Map<String, Object>) request.getAttribute("parameters");
 		final int code = 200;
 		String response;
 
@@ -65,8 +93,21 @@ class RequestHandler implements HttpHandler {
 			}
 
 			response = new OrderListPresenterImpl(orderListView, Order.findAll()).go();
+		} else if (uri.matches("^/" + ClientView.TAG)) {
+			if (clientView == null) {
+				clientView = new ClientViewImpl();
+			}
+
+			int id = 0;
+			try {
+				id = Integer.parseInt((String) params.get("id"));
+			} catch (final NumberFormatException e) {
+				throw new HTTPException(404, "File not found.");
+			}
+
+			response = new ClientPresenterImpl(clientView, Client.findById(id)).go();
 		} else {
-			throw new HTTPException(404, "404: File not found.");
+			throw new HTTPException(404, "File not found.");
 		}
 
 		request.sendResponseHeaders(code, response.length());

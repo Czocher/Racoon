@@ -13,7 +13,7 @@
 					</thead>
 					<tbody>
 						<#list orderList as item>
-							<tr data-type="link" href="order?id=${item.id}">
+							<tr data-type="link" href="/${orderPath}?id=${item.id}">
 								<td>${item.id}</td>
 								<td>${item.product}</td>
 								<td>${item.quantity}</td>

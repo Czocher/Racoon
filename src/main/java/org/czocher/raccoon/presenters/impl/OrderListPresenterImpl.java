@@ -2,6 +2,7 @@ package org.czocher.raccoon.presenters.impl;
 
 import java.util.List;
 
+import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.models.Order;
 import org.czocher.raccoon.presenters.OrderListPresenter;
 import org.czocher.raccoon.views.OrderListView;
@@ -17,7 +18,7 @@ public class OrderListPresenterImpl implements OrderListPresenter {
 	}
 
 	@Override
-	public String go() {
+	public String go() throws HTTPException {
 		return view.render();
 	}
 
