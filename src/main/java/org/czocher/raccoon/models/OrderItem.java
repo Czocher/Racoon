@@ -37,4 +37,20 @@ public class OrderItem extends Model {
 		setInteger("quantity", quantity);
 	}
 
+	public Product getProduct() {
+		return parent(Product.class);
+	}
+
+	public void setProduct(final Product product) {
+		setParent(product);
+	}
+
+	public Order getOrder() {
+		return parent(Order.class);
+	}
+
+	public void setOrder(final Order order) {
+		setParent(order);
+	}
+
 }

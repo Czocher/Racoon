@@ -14,18 +14,21 @@ import org.czocher.raccoon.presenters.impl.ClientListPresenterImpl;
 import org.czocher.raccoon.presenters.impl.ClientPresenterImpl;
 import org.czocher.raccoon.presenters.impl.IndexPresenterImpl;
 import org.czocher.raccoon.presenters.impl.OrderListPresenterImpl;
+import org.czocher.raccoon.presenters.impl.OrderPresenterImpl;
 import org.czocher.raccoon.presenters.impl.ProductListPresenterImpl;
 import org.czocher.raccoon.presenters.impl.ProductPresenterImpl;
 import org.czocher.raccoon.views.ClientListView;
 import org.czocher.raccoon.views.ClientView;
 import org.czocher.raccoon.views.IndexView;
 import org.czocher.raccoon.views.OrderListView;
+import org.czocher.raccoon.views.OrderView;
 import org.czocher.raccoon.views.ProductListView;
 import org.czocher.raccoon.views.ProductView;
 import org.czocher.raccoon.views.impl.ClientListViewImpl;
 import org.czocher.raccoon.views.impl.ClientViewImpl;
 import org.czocher.raccoon.views.impl.IndexViewImpl;
 import org.czocher.raccoon.views.impl.OrderListViewImpl;
+import org.czocher.raccoon.views.impl.OrderViewImpl;
 import org.czocher.raccoon.views.impl.ProductListViewImpl;
 import org.czocher.raccoon.views.impl.ProductViewImpl;
 import org.javalite.activejdbc.Base;
@@ -44,6 +47,7 @@ class RequestHandler implements HttpHandler {
 	private ClientView clientView;
 	private ProductListViewImpl productListView;
 	private ProductViewImpl productView;
+	private OrderViewImpl orderView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -134,6 +138,19 @@ class RequestHandler implements HttpHandler {
 			}
 
 			response = new ProductPresenterImpl(productView, Product.findById(id)).go();
+		} else if (uri.matches("^/" + OrderView.TAG)) {
+			if (orderView == null) {
+				orderView = new OrderViewImpl();
+			}
+
+			int id = 0;
+			try {
+				id = Integer.parseInt((String) params.get("id"));
+			} catch (final NumberFormatException e) {
+				throw new HTTPException(404, "File not found.");
+			}
+
+			response = new OrderPresenterImpl(orderView, Order.findById(id)).go();
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
