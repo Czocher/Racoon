@@ -8,22 +8,23 @@ import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.HTTPException;
-import org.czocher.raccoon.presenters.OrderPresenter;
+import org.czocher.raccoon.presenters.OrderItemPresenter;
 import org.czocher.raccoon.views.ClientView;
 import org.czocher.raccoon.views.OrderItemView;
 import org.czocher.raccoon.views.OrderView;
+import org.czocher.raccoon.views.ProductView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class OrderViewImpl implements OrderView {
+public class OrderItemViewImpl implements OrderItemView {
 
-	private OrderPresenter presenter;
+	private OrderItemPresenter presenter;
 	private Template template;
 
-	public OrderViewImpl() {
+	public OrderItemViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("order.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("orderItem.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -34,13 +35,14 @@ public class OrderViewImpl implements OrderView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		if (presenter.getOrder() != null) {
-			values.put("order", presenter.getOrder());
+		if (presenter.getOrderItem() != null) {
+			values.put("orderItem", presenter.getOrderItem());
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
 
-		values.put("orderItemPath", OrderItemView.TAG);
+		values.put("productPath", ProductView.TAG);
+		values.put("orderPath", OrderView.TAG);
 		values.put("clientPath", ClientView.TAG);
 
 		try {
@@ -53,12 +55,12 @@ public class OrderViewImpl implements OrderView {
 	}
 
 	@Override
-	public OrderPresenter getPresenter() {
+	public OrderItemPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final OrderPresenter presenter) {
+	public void setPresenter(final OrderItemPresenter presenter) {
 		this.presenter = presenter;
 	}
 

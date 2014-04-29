@@ -1,9 +1,10 @@
 <#import "master.template.ftl" as m> <@m.template>
 	<h1>Order #${order.id}</h1>
 	<ul>
+		<li>Client: <a href="/${clientPath}?id=${order.client.id}">${order.client.name}</a></li>
 		<li>Timestamp: ${order.timestamp}</li>
 	</ul>
-	<h1>List of items in this order:</h1>
+	<h1>List order items:</h1>
 	<#if order.orderItems?has_content>
 	<table class="table table-hover table-striped">
 		<thead>
@@ -15,7 +16,7 @@
 		</thead>
 		<tbody>
 			<#list order.orderItems as item>
-			<tr data-type="link" href="/${productPath}?id=${item.id}">
+			<tr data-type="link" href="/${orderItemPath}?id=${item.id}">
 				<td>${item.id}</td>
 				<td>${item.product.name}</td>
 				<td>${item.quantity}</td>

@@ -9,10 +9,12 @@ import java.util.Map;
 
 import org.czocher.raccoon.models.Client;
 import org.czocher.raccoon.models.Order;
+import org.czocher.raccoon.models.OrderItem;
 import org.czocher.raccoon.models.Product;
 import org.czocher.raccoon.presenters.impl.ClientListPresenterImpl;
 import org.czocher.raccoon.presenters.impl.ClientPresenterImpl;
 import org.czocher.raccoon.presenters.impl.IndexPresenterImpl;
+import org.czocher.raccoon.presenters.impl.OrderItemPresenterImpl;
 import org.czocher.raccoon.presenters.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.presenters.impl.OrderPresenterImpl;
 import org.czocher.raccoon.presenters.impl.ProductListPresenterImpl;
@@ -20,6 +22,7 @@ import org.czocher.raccoon.presenters.impl.ProductPresenterImpl;
 import org.czocher.raccoon.views.ClientListView;
 import org.czocher.raccoon.views.ClientView;
 import org.czocher.raccoon.views.IndexView;
+import org.czocher.raccoon.views.OrderItemView;
 import org.czocher.raccoon.views.OrderListView;
 import org.czocher.raccoon.views.OrderView;
 import org.czocher.raccoon.views.ProductListView;
@@ -27,6 +30,7 @@ import org.czocher.raccoon.views.ProductView;
 import org.czocher.raccoon.views.impl.ClientListViewImpl;
 import org.czocher.raccoon.views.impl.ClientViewImpl;
 import org.czocher.raccoon.views.impl.IndexViewImpl;
+import org.czocher.raccoon.views.impl.OrderItemViewImpl;
 import org.czocher.raccoon.views.impl.OrderListViewImpl;
 import org.czocher.raccoon.views.impl.OrderViewImpl;
 import org.czocher.raccoon.views.impl.ProductListViewImpl;
@@ -48,6 +52,7 @@ class RequestHandler implements HttpHandler {
 	private ProductListViewImpl productListView;
 	private ProductViewImpl productView;
 	private OrderViewImpl orderView;
+	private OrderItemViewImpl orderItemView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -151,6 +156,19 @@ class RequestHandler implements HttpHandler {
 			}
 
 			response = new OrderPresenterImpl(orderView, Order.findById(id)).go();
+		} else if (uri.matches("^/" + OrderItemView.TAG)) {
+			if (orderItemView == null) {
+				orderItemView = new OrderItemViewImpl();
+			}
+
+			int id = 0;
+			try {
+				id = Integer.parseInt((String) params.get("id"));
+			} catch (final NumberFormatException e) {
+				throw new HTTPException(404, "File not found.");
+			}
+
+			response = new OrderItemPresenterImpl(orderItemView, OrderItem.findById(id)).go();
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
