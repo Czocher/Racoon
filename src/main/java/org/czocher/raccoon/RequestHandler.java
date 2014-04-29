@@ -11,33 +11,33 @@ import org.czocher.raccoon.models.Client;
 import org.czocher.raccoon.models.Order;
 import org.czocher.raccoon.models.OrderItem;
 import org.czocher.raccoon.models.Product;
-import org.czocher.raccoon.presenters.impl.ClientListPresenterImpl;
-import org.czocher.raccoon.presenters.impl.ClientPresenterImpl;
-import org.czocher.raccoon.presenters.impl.IndexPresenterImpl;
-import org.czocher.raccoon.presenters.impl.NewClientPresenterImpl;
-import org.czocher.raccoon.presenters.impl.OrderItemPresenterImpl;
-import org.czocher.raccoon.presenters.impl.OrderListPresenterImpl;
-import org.czocher.raccoon.presenters.impl.OrderPresenterImpl;
-import org.czocher.raccoon.presenters.impl.ProductListPresenterImpl;
-import org.czocher.raccoon.presenters.impl.ProductPresenterImpl;
-import org.czocher.raccoon.views.ClientListView;
-import org.czocher.raccoon.views.ClientView;
-import org.czocher.raccoon.views.IndexView;
-import org.czocher.raccoon.views.NewClientView;
-import org.czocher.raccoon.views.OrderItemView;
-import org.czocher.raccoon.views.OrderListView;
-import org.czocher.raccoon.views.OrderView;
-import org.czocher.raccoon.views.ProductListView;
-import org.czocher.raccoon.views.ProductView;
-import org.czocher.raccoon.views.impl.ClientListViewImpl;
-import org.czocher.raccoon.views.impl.ClientViewImpl;
-import org.czocher.raccoon.views.impl.IndexViewImpl;
-import org.czocher.raccoon.views.impl.NewClientViewImpl;
-import org.czocher.raccoon.views.impl.OrderItemViewImpl;
-import org.czocher.raccoon.views.impl.OrderListViewImpl;
-import org.czocher.raccoon.views.impl.OrderViewImpl;
-import org.czocher.raccoon.views.impl.ProductListViewImpl;
-import org.czocher.raccoon.views.impl.ProductViewImpl;
+import org.czocher.raccoon.presenters.client.impl.ClientListPresenterImpl;
+import org.czocher.raccoon.presenters.client.impl.ClientPresenterImpl;
+import org.czocher.raccoon.presenters.client.impl.NewClientPresenterImpl;
+import org.czocher.raccoon.presenters.index.impl.IndexPresenterImpl;
+import org.czocher.raccoon.presenters.order.impl.OrderListPresenterImpl;
+import org.czocher.raccoon.presenters.order.impl.OrderPresenterImpl;
+import org.czocher.raccoon.presenters.orderitem.impl.OrderItemPresenterImpl;
+import org.czocher.raccoon.presenters.product.impl.ProductListPresenterImpl;
+import org.czocher.raccoon.presenters.product.impl.ProductPresenterImpl;
+import org.czocher.raccoon.views.client.ClientListView;
+import org.czocher.raccoon.views.client.ClientView;
+import org.czocher.raccoon.views.client.NewClientView;
+import org.czocher.raccoon.views.client.impl.ClientListViewImpl;
+import org.czocher.raccoon.views.client.impl.ClientViewImpl;
+import org.czocher.raccoon.views.client.impl.NewClientViewImpl;
+import org.czocher.raccoon.views.index.IndexView;
+import org.czocher.raccoon.views.index.impl.IndexViewImpl;
+import org.czocher.raccoon.views.order.OrderListView;
+import org.czocher.raccoon.views.order.OrderView;
+import org.czocher.raccoon.views.order.impl.OrderListViewImpl;
+import org.czocher.raccoon.views.order.impl.OrderViewImpl;
+import org.czocher.raccoon.views.orderitem.OrderItemView;
+import org.czocher.raccoon.views.orderitem.impl.OrderItemViewImpl;
+import org.czocher.raccoon.views.product.ProductListView;
+import org.czocher.raccoon.views.product.ProductView;
+import org.czocher.raccoon.views.product.impl.ProductListViewImpl;
+import org.czocher.raccoon.views.product.impl.ProductViewImpl;
 import org.javalite.activejdbc.Base;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -99,101 +99,23 @@ class RequestHandler implements HttpHandler {
 		String response;
 
 		if (uri.matches("^/" + IndexView.TAG)) {
-			if (indexView == null) {
-				indexView = new IndexViewImpl();
-			}
-			response = new IndexPresenterImpl(indexView).go();
+			response = routeIndex();
 		} else if (uri.matches("^/" + ClientListView.TAG)) {
-			if (clientListView == null) {
-				clientListView = new ClientListViewImpl();
-			}
-
-			response = new ClientListPresenterImpl(clientListView, Client.findAll()).go();
+			response = routeClientList();
 		} else if (uri.matches("^/" + ProductListView.TAG)) {
-			if (productListView == null) {
-				productListView = new ProductListViewImpl();
-			}
-
-			response = new ProductListPresenterImpl(productListView, Product.findAll()).go();
+			response = routeProductList();
 		} else if (uri.matches("^/" + OrderListView.TAG)) {
-			if (orderListView == null) {
-				orderListView = new OrderListViewImpl();
-			}
-
-			response = new OrderListPresenterImpl(orderListView, Order.findAll()).go();
+			response = routeOrderList();
 		} else if (uri.matches("^/" + ClientView.TAG)) {
-			if (clientView == null) {
-				clientView = new ClientViewImpl();
-			}
-
-			int id = 0;
-			try {
-				id = Integer.parseInt((String) params.get("id"));
-			} catch (final NumberFormatException e) {
-				throw new HTTPException(404, "File not found.");
-			}
-
-			response = new ClientPresenterImpl(clientView, Client.findById(id)).go();
+			response = routeClient(params);
 		} else if (uri.matches("^/" + ProductView.TAG)) {
-			if (productView == null) {
-				productView = new ProductViewImpl();
-			}
-
-			int id = 0;
-			try {
-				id = Integer.parseInt((String) params.get("id"));
-			} catch (final NumberFormatException e) {
-				throw new HTTPException(404, "File not found.");
-			}
-
-			response = new ProductPresenterImpl(productView, Product.findById(id)).go();
+			response = routeProduct(params);
 		} else if (uri.matches("^/" + OrderView.TAG)) {
-			if (orderView == null) {
-				orderView = new OrderViewImpl();
-			}
-
-			int id = 0;
-			try {
-				id = Integer.parseInt((String) params.get("id"));
-			} catch (final NumberFormatException e) {
-				throw new HTTPException(404, "File not found.");
-			}
-
-			response = new OrderPresenterImpl(orderView, Order.findById(id)).go();
+			response = routeOrder(params);
 		} else if (uri.matches("^/" + OrderItemView.TAG)) {
-			if (orderItemView == null) {
-				orderItemView = new OrderItemViewImpl();
-			}
-
-			int id = 0;
-			try {
-				id = Integer.parseInt((String) params.get("id"));
-			} catch (final NumberFormatException e) {
-				throw new HTTPException(404, "File not found.");
-			}
-
-			response = new OrderItemPresenterImpl(orderItemView, OrderItem.findById(id)).go();
+			response = routeOrderItem(params);
 		} else if (uri.matches("^/" + NewClientView.TAG)) {
-			Client n;
-			if (newClientView == null) {
-				newClientView = new NewClientViewImpl();
-			}
-			if (clientView == null) {
-				clientView = new ClientViewImpl();
-			}
-			if (request.getRequestMethod().equals("POST")) {
-				if (!params.containsKey("name") || params.get("name") == null || params.get("name").toString().isEmpty()) {
-					throw new HTTPException(400, "Bad request.");
-				}
-
-				n = new Client(params.get("name").toString());
-				n.saveIt();
-
-				response = new ClientPresenterImpl(clientView, n).go();
-			} else {
-				response = new NewClientPresenterImpl(newClientView).go();
-			}
-
+			response = routeNewClient(request, params);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
@@ -205,6 +127,137 @@ class RequestHandler implements HttpHandler {
 		os.close();
 		request.close();
 		System.out.println("Request for " + uri + " handled: " + code);
+	}
+
+	private String routeNewClient(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+		String response;
+		Client n;
+		if (newClientView == null) {
+			newClientView = new NewClientViewImpl();
+		}
+		if (clientView == null) {
+			clientView = new ClientViewImpl();
+		}
+		if (request.getRequestMethod().equals("POST")) {
+			if (!params.containsKey("name") || params.get("name") == null || params.get("name").toString().isEmpty()) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			n = new Client(params.get("name").toString());
+			n.saveIt();
+
+			response = new ClientPresenterImpl(clientView, n).go();
+		} else {
+			response = new NewClientPresenterImpl(newClientView).go();
+		}
+		return response;
+	}
+
+	private String routeOrderItem(final Map<String, Object> params) throws HTTPException {
+		String response;
+		if (orderItemView == null) {
+			orderItemView = new OrderItemViewImpl();
+		}
+
+		int id = 0;
+		try {
+			id = Integer.parseInt((String) params.get("id"));
+		} catch (final NumberFormatException e) {
+			throw new HTTPException(404, "File not found.");
+		}
+
+		response = new OrderItemPresenterImpl(orderItemView, OrderItem.findById(id)).go();
+		return response;
+	}
+
+	private String routeOrder(final Map<String, Object> params) throws HTTPException {
+		String response;
+		if (orderView == null) {
+			orderView = new OrderViewImpl();
+		}
+
+		int id = 0;
+		try {
+			id = Integer.parseInt((String) params.get("id"));
+		} catch (final NumberFormatException e) {
+			throw new HTTPException(404, "File not found.");
+		}
+
+		response = new OrderPresenterImpl(orderView, Order.findById(id)).go();
+		return response;
+	}
+
+	private String routeProduct(final Map<String, Object> params) throws HTTPException {
+		String response;
+		if (productView == null) {
+			productView = new ProductViewImpl();
+		}
+
+		int id = 0;
+		try {
+			id = Integer.parseInt((String) params.get("id"));
+		} catch (final NumberFormatException e) {
+			throw new HTTPException(404, "File not found.");
+		}
+
+		response = new ProductPresenterImpl(productView, Product.findById(id)).go();
+		return response;
+	}
+
+	private String routeClient(final Map<String, Object> params) throws HTTPException {
+		String response;
+		if (clientView == null) {
+			clientView = new ClientViewImpl();
+		}
+
+		int id = 0;
+		try {
+			id = Integer.parseInt((String) params.get("id"));
+		} catch (final NumberFormatException e) {
+			throw new HTTPException(404, "File not found.");
+		}
+
+		response = new ClientPresenterImpl(clientView, Client.findById(id)).go();
+		return response;
+	}
+
+	private String routeOrderList() throws HTTPException {
+		String response;
+		if (orderListView == null) {
+			orderListView = new OrderListViewImpl();
+		}
+
+		response = new OrderListPresenterImpl(orderListView, Order.findAll()).go();
+		return response;
+	}
+
+	private String routeProductList() throws HTTPException {
+		String response;
+		if (productListView == null) {
+			productListView = new ProductListViewImpl();
+		}
+
+		response = new ProductListPresenterImpl(productListView, Product.findAll()).go();
+		return response;
+	}
+
+	private String routeClientList() throws HTTPException {
+		String response;
+		if (clientListView == null) {
+			clientListView = new ClientListViewImpl();
+		}
+
+		response = new ClientListPresenterImpl(clientListView, Client.findAll()).go();
+		return response;
+	}
+
+	private String routeIndex() throws HTTPException {
+		String response;
+		if (indexView == null) {
+			indexView = new IndexViewImpl();
+		}
+		response = new IndexPresenterImpl(indexView).go();
+		return response;
 	}
 
 	private static void openDatabaseConnection() {
