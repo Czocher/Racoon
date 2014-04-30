@@ -183,6 +183,10 @@ class RequestHandler implements HttpHandler {
 			final Order o = Order.findById(orderId);
 			final Product p = Product.findById(productId);
 
+			if (o == null || p == null) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
 			o.addOrderItem(n);
 			p.addOrderItem(n);
 
@@ -223,6 +227,11 @@ class RequestHandler implements HttpHandler {
 
 			n = new Order();
 			final Client c = Client.findById(id);
+
+			if (c == null) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
 			c.addOrder(n);
 
 			request.getResponseHeaders().add("Location", "/" + OrderView.TAG + "?id=" + n.getId());
