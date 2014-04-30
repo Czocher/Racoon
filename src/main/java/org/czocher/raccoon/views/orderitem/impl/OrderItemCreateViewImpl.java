@@ -1,4 +1,4 @@
-package org.czocher.raccoon.views.order.impl;
+package org.czocher.raccoon.views.orderitem.impl;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -8,23 +8,20 @@ import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.HTTPException;
-import org.czocher.raccoon.presenters.order.OrderPresenter;
-import org.czocher.raccoon.views.client.ClientView;
-import org.czocher.raccoon.views.order.OrderView;
+import org.czocher.raccoon.presenters.orderitem.OrderItemCreatePresenter;
 import org.czocher.raccoon.views.orderitem.OrderItemCreateView;
-import org.czocher.raccoon.views.orderitem.OrderItemView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class OrderViewImpl implements OrderView {
+public class OrderItemCreateViewImpl implements OrderItemCreateView {
 
-	private OrderPresenter presenter;
+	private OrderItemCreatePresenter presenter;
 	private Template template;
 
-	public OrderViewImpl() {
+	public OrderItemCreateViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("order.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("orderItemCreate.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -35,15 +32,9 @@ public class OrderViewImpl implements OrderView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		if (presenter.getOrder() != null) {
-			values.put("order", presenter.getOrder());
-		} else {
-			throw new HTTPException(404, "File not found.");
-		}
-
-		values.put("orderItemPath", OrderItemView.TAG);
 		values.put("orderItemCreatePath", OrderItemCreateView.TAG);
-		values.put("clientPath", ClientView.TAG);
+		values.put("productList", presenter.getProductList());
+		values.put("orderId", presenter.getOrderId());
 
 		try {
 			template.process(values, out);
@@ -55,12 +46,12 @@ public class OrderViewImpl implements OrderView {
 	}
 
 	@Override
-	public OrderPresenter getPresenter() {
+	public OrderItemCreatePresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final OrderPresenter presenter) {
+	public void setPresenter(final OrderItemCreatePresenter presenter) {
 		this.presenter = presenter;
 	}
 

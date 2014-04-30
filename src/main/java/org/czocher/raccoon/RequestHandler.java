@@ -18,6 +18,7 @@ import org.czocher.raccoon.presenters.index.impl.IndexPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderCreatePresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderPresenterImpl;
+import org.czocher.raccoon.presenters.orderitem.impl.OrderItemCreatePresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemPresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductCreatePresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductListPresenterImpl;
@@ -36,7 +37,9 @@ import org.czocher.raccoon.views.order.OrderView;
 import org.czocher.raccoon.views.order.impl.OrderCreateViewImpl;
 import org.czocher.raccoon.views.order.impl.OrderListViewImpl;
 import org.czocher.raccoon.views.order.impl.OrderViewImpl;
+import org.czocher.raccoon.views.orderitem.OrderItemCreateView;
 import org.czocher.raccoon.views.orderitem.OrderItemView;
+import org.czocher.raccoon.views.orderitem.impl.OrderItemCreateViewImpl;
 import org.czocher.raccoon.views.orderitem.impl.OrderItemViewImpl;
 import org.czocher.raccoon.views.product.ProductCreateView;
 import org.czocher.raccoon.views.product.ProductListView;
@@ -67,6 +70,7 @@ class RequestHandler implements HttpHandler {
 	private int code;
 	private ProductCreateViewImpl productCreateView;
 	private OrderCreateViewImpl orderCreateView;
+	private OrderItemCreateViewImpl orderItemCreateView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -130,6 +134,8 @@ class RequestHandler implements HttpHandler {
 			routeProductCreate(request, params);
 		} else if (uri.matches("^/" + OrderCreateView.TAG)) {
 			routeOrderCreate(request, params);
+		} else if (uri.matches("^/" + OrderItemCreateView.TAG)) {
+			routeOrderItemCreate(request, params);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
@@ -141,6 +147,61 @@ class RequestHandler implements HttpHandler {
 		os.close();
 		request.close();
 		System.out.println("Request for " + uri + " handled: " + code);
+	}
+
+	private void routeOrderItemCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+		OrderItem n;
+		if (orderItemCreateView == null) {
+			orderItemCreateView = new OrderItemCreateViewImpl();
+		}
+		if (request.getRequestMethod().equals("POST")) {
+
+			if (!params.containsKey("productId") || params.get("productId") == null || params.get("productId").toString().isEmpty()) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			if (!params.containsKey("orderId") || params.get("orderId") == null || params.get("productId").toString().isEmpty()) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			if (!params.containsKey("quantity") || params.get("quantity") == null || params.get("quantity").toString().isEmpty()) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			int productId = 0;
+			int orderId = 0;
+			int quantity = 0;
+			try {
+				productId = Integer.parseInt((String) params.get("productId"));
+				orderId = Integer.parseInt((String) params.get("orderId"));
+				quantity = Integer.parseInt((String) params.get("quantity"));
+			} catch (final NumberFormatException e) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			n = new OrderItem(quantity);
+			final Order o = Order.findById(orderId);
+			final Product p = Product.findById(productId);
+
+			o.addOrderItem(n);
+			p.addOrderItem(n);
+
+			request.getResponseHeaders().add("Location", "/" + OrderView.TAG + "?id=" + o.getId());
+			code = 307;
+			response = "Redirecting...";
+		} else if (request.getRequestMethod().equals("GET") && params.containsKey("orderId")) {
+
+			int orderId = 0;
+			try {
+				orderId = Integer.parseInt((String) params.get("orderId"));
+			} catch (final NumberFormatException e) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			response = new OrderItemCreatePresenterImpl(orderItemCreateView, orderId, Product.findAll()).go();
+		} else {
+			throw new HTTPException(400, "Bad request.");
+		}
 	}
 
 	private void routeOrderCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {

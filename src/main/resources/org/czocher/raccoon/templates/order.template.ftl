@@ -35,6 +35,6 @@
 	<div class="list-group-item">No items specified.</div>
 	</#if>
 	
-	<a href="/add/order" class="btn btn-primary btn-block"><span
+	<a href="/${orderItemCreatePath}?orderId=${order.id}" class="btn btn-primary btn-block"><span
 		class="glyphicon glyphicon-plus"></span> Add item</a>
 </@m.template>
