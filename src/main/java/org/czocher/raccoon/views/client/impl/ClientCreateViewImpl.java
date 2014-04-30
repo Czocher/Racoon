@@ -8,20 +8,20 @@ import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.HTTPException;
-import org.czocher.raccoon.presenters.client.NewClientPresenter;
-import org.czocher.raccoon.views.client.NewClientView;
+import org.czocher.raccoon.presenters.client.ClientCreatePresenter;
+import org.czocher.raccoon.views.client.ClientCreateView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class NewClientViewImpl implements NewClientView {
+public class ClientCreateViewImpl implements ClientCreateView {
 
-	private NewClientPresenter presenter;
+	private ClientCreatePresenter presenter;
 	private Template template;
 
-	public NewClientViewImpl() {
+	public ClientCreateViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("newClient.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("clientCreate.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -32,7 +32,7 @@ public class NewClientViewImpl implements NewClientView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("newClientPath", NewClientView.TAG);
+		values.put("clientCreatePath", ClientCreateView.TAG);
 
 		try {
 			template.process(values, out);
@@ -44,12 +44,12 @@ public class NewClientViewImpl implements NewClientView {
 	}
 
 	@Override
-	public NewClientPresenter getPresenter() {
+	public ClientCreatePresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final NewClientPresenter presenter) {
+	public void setPresenter(final ClientCreatePresenter presenter) {
 		this.presenter = presenter;
 	}
 

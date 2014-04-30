@@ -13,7 +13,7 @@ import org.czocher.raccoon.models.OrderItem;
 import org.czocher.raccoon.models.Product;
 import org.czocher.raccoon.presenters.client.impl.ClientListPresenterImpl;
 import org.czocher.raccoon.presenters.client.impl.ClientPresenterImpl;
-import org.czocher.raccoon.presenters.client.impl.NewClientPresenterImpl;
+import org.czocher.raccoon.presenters.client.impl.ClientCreatePresenterImpl;
 import org.czocher.raccoon.presenters.index.impl.IndexPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderPresenterImpl;
@@ -22,10 +22,10 @@ import org.czocher.raccoon.presenters.product.impl.ProductListPresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductPresenterImpl;
 import org.czocher.raccoon.views.client.ClientListView;
 import org.czocher.raccoon.views.client.ClientView;
-import org.czocher.raccoon.views.client.NewClientView;
+import org.czocher.raccoon.views.client.ClientCreateView;
 import org.czocher.raccoon.views.client.impl.ClientListViewImpl;
 import org.czocher.raccoon.views.client.impl.ClientViewImpl;
-import org.czocher.raccoon.views.client.impl.NewClientViewImpl;
+import org.czocher.raccoon.views.client.impl.ClientCreateViewImpl;
 import org.czocher.raccoon.views.index.IndexView;
 import org.czocher.raccoon.views.index.impl.IndexViewImpl;
 import org.czocher.raccoon.views.order.OrderListView;
@@ -56,7 +56,7 @@ class RequestHandler implements HttpHandler {
 	private ProductViewImpl productView;
 	private OrderViewImpl orderView;
 	private OrderItemViewImpl orderItemView;
-	private NewClientViewImpl newClientView;
+	private ClientCreateViewImpl clientCreateView;
 	private String response;
 	private int code;
 
@@ -116,8 +116,8 @@ class RequestHandler implements HttpHandler {
 			routeOrder(params);
 		} else if (uri.matches("^/" + OrderItemView.TAG)) {
 			routeOrderItem(params);
-		} else if (uri.matches("^/" + NewClientView.TAG)) {
-			routeNewClient(request, params);
+		} else if (uri.matches("^/" + ClientCreateView.TAG)) {
+			routeClientCreate(request, params);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
@@ -131,10 +131,10 @@ class RequestHandler implements HttpHandler {
 		System.out.println("Request for " + uri + " handled: " + code);
 	}
 
-	private void routeNewClient(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+	private void routeClientCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
 		Client n;
-		if (newClientView == null) {
-			newClientView = new NewClientViewImpl();
+		if (clientCreateView == null) {
+			clientCreateView = new ClientCreateViewImpl();
 		}
 		if (request.getRequestMethod().equals("POST")) {
 			if (!params.containsKey("name") || params.get("name") == null || params.get("name").toString().isEmpty()) {
@@ -148,7 +148,7 @@ class RequestHandler implements HttpHandler {
 			code = 307;
 			response = "Redirecting...";
 		} else {
-			response = new NewClientPresenterImpl(newClientView).go();
+			response = new ClientCreatePresenterImpl(clientCreateView).go();
 		}
 	}
 

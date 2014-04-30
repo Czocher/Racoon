@@ -1,7 +1,7 @@
 <#import "master.template.ftl" as m>
 <@m.template>
 	<h1>New client</h1>
-	<form role="form" id="form" action="/${newClientPath}" method="post">
+	<form role="form" id="form" action="/${clientCreatePath}" method="post">
 		<div class="form-group">
 			<label class="sr-only" for="name">Email address</label>
 			<input type="text" class="form-control" id="name" name="name"
