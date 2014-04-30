@@ -31,6 +31,6 @@
 				<div class="list-group-item">No orders specified.</div>
 			</#if>
 				
-			<a href="/add/order" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add order</a>
+			<a href="/${orderCreatePath}" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add order</a>
 			
 </@m.template>

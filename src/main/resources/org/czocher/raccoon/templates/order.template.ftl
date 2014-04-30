@@ -32,7 +32,7 @@
 		});
 	</script>
 	<#else>
-	<div class="list-group-item">No products specified.</div>
+	<div class="list-group-item">No items specified.</div>
 	</#if>
 	
 	<a href="/add/order" class="btn btn-primary btn-block"><span

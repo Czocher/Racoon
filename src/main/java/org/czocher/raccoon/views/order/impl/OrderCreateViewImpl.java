@@ -7,35 +7,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.order.OrderListPresenter;
+import org.czocher.raccoon.HTTPException;
+import org.czocher.raccoon.presenters.order.OrderCreatePresenter;
 import org.czocher.raccoon.views.order.OrderCreateView;
-import org.czocher.raccoon.views.order.OrderListView;
-import org.czocher.raccoon.views.order.OrderView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class OrderListViewImpl implements OrderListView {
+public class OrderCreateViewImpl implements OrderCreateView {
 
-	private OrderListPresenter presenter;
+	private OrderCreatePresenter presenter;
 	private Template template;
 
-	public OrderListViewImpl() {
+	public OrderCreateViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("orderList.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("orderCreate.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public String render() {
+	public String render() throws HTTPException {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("orderPath", OrderView.TAG);
+		values.put("clientList", presenter.getClientList());
 		values.put("orderCreatePath", OrderCreateView.TAG);
-		values.put("orderList", presenter.getOrderList());
 
 		try {
 			template.process(values, out);
@@ -47,12 +45,12 @@ public class OrderListViewImpl implements OrderListView {
 	}
 
 	@Override
-	public OrderListPresenter getPresenter() {
+	public OrderCreatePresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final OrderListPresenter presenter) {
+	public void setPresenter(final OrderCreatePresenter presenter) {
 		this.presenter = presenter;
 	}
 
