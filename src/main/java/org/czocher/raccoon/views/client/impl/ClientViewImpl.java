@@ -10,6 +10,7 @@ import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.client.ClientPresenter;
 import org.czocher.raccoon.views.client.ClientView;
+import org.czocher.raccoon.views.order.OrderCreateView;
 import org.czocher.raccoon.views.order.OrderView;
 
 import freemarker.template.Template;
@@ -40,6 +41,7 @@ public class ClientViewImpl implements ClientView {
 		}
 
 		values.put("orderPath", OrderView.TAG);
+		values.put("orderCreatePath", OrderCreateView.TAG);
 
 		try {
 			template.process(values, out);

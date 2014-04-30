@@ -148,7 +148,7 @@ class RequestHandler implements HttpHandler {
 		if (orderCreateView == null) {
 			orderCreateView = new OrderCreateViewImpl();
 		}
-		if (request.getRequestMethod().equals("POST")) {
+		if (request.getRequestMethod().equals("POST") || request.getRequestMethod().equals("GET") && params.containsKey("clientId")) {
 			if (!params.containsKey("clientId") || params.get("clientId") == null || params.get("clientId").toString().isEmpty()) {
 				throw new HTTPException(400, "Bad request.");
 			}
