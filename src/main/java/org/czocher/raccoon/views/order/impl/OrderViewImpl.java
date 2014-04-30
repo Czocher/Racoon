@@ -10,6 +10,7 @@ import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.order.OrderPresenter;
 import org.czocher.raccoon.views.client.ClientView;
+import org.czocher.raccoon.views.order.OrderDeleteView;
 import org.czocher.raccoon.views.order.OrderView;
 import org.czocher.raccoon.views.orderitem.OrderItemCreateView;
 import org.czocher.raccoon.views.orderitem.OrderItemView;
@@ -41,6 +42,7 @@ public class OrderViewImpl implements OrderView {
 			throw new HTTPException(404, "File not found.");
 		}
 
+		values.put("orderDeletePath", OrderDeleteView.TAG);
 		values.put("orderItemPath", OrderItemView.TAG);
 		values.put("orderItemCreatePath", OrderItemCreateView.TAG);
 		values.put("clientPath", ClientView.TAG);

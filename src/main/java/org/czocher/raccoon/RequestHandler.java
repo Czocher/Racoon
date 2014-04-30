@@ -17,6 +17,7 @@ import org.czocher.raccoon.presenters.client.impl.ClientListPresenterImpl;
 import org.czocher.raccoon.presenters.client.impl.ClientPresenterImpl;
 import org.czocher.raccoon.presenters.index.impl.IndexPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderCreatePresenterImpl;
+import org.czocher.raccoon.presenters.order.impl.OrderDeletePresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderPresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemCreatePresenterImpl;
@@ -35,9 +36,11 @@ import org.czocher.raccoon.views.client.impl.ClientViewImpl;
 import org.czocher.raccoon.views.index.IndexView;
 import org.czocher.raccoon.views.index.impl.IndexViewImpl;
 import org.czocher.raccoon.views.order.OrderCreateView;
+import org.czocher.raccoon.views.order.OrderDeleteView;
 import org.czocher.raccoon.views.order.OrderListView;
 import org.czocher.raccoon.views.order.OrderView;
 import org.czocher.raccoon.views.order.impl.OrderCreateViewImpl;
+import org.czocher.raccoon.views.order.impl.OrderDeleteViewImpl;
 import org.czocher.raccoon.views.order.impl.OrderListViewImpl;
 import org.czocher.raccoon.views.order.impl.OrderViewImpl;
 import org.czocher.raccoon.views.orderitem.OrderItemCreateView;
@@ -75,6 +78,7 @@ class RequestHandler implements HttpHandler {
 	private OrderCreateViewImpl orderCreateView;
 	private OrderItemCreateViewImpl orderItemCreateView;
 	private ClientDeleteViewImpl clientDeleteView;
+	private OrderDeleteView orderDeleteView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -142,6 +146,8 @@ class RequestHandler implements HttpHandler {
 			routeOrderItemCreate(request, params);
 		} else if (uri.matches("^/" + ClientDeleteView.TAG)) {
 			routeClientDelete(request, params);
+		} else if (uri.matches("^/" + OrderDeleteView.TAG)) {
+			routeOrderDelete(request, params);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
@@ -153,6 +159,32 @@ class RequestHandler implements HttpHandler {
 		os.close();
 		request.close();
 		System.out.println("Request for " + uri + " handled: " + code);
+	}
+
+	private void routeOrderDelete(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+		if (orderDeleteView == null) {
+			orderDeleteView = new OrderDeleteViewImpl();
+		}
+
+		if (!params.containsKey("id") || params.get("id") == null || params.get("id").toString().isEmpty()) {
+			throw new HTTPException(400, "Bad request.");
+		}
+
+		int id = 0;
+		try {
+			id = Integer.parseInt((String) params.get("id"));
+		} catch (final NumberFormatException e) {
+			throw new HTTPException(400, "Bad request.");
+		}
+
+		final Order o = Order.findById(id);
+
+		if (o == null) {
+			throw new HTTPException(400, "Bad request.");
+		} else {
+			o.delete(true);
+			response = new OrderDeletePresenterImpl(orderDeleteView).go();
+		}
 	}
 
 	private void routeClientDelete(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
