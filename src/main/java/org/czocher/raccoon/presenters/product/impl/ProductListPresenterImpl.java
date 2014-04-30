@@ -13,7 +13,7 @@ public class ProductListPresenterImpl implements ProductListPresenter {
 	private ProductListView view;
 
 	public ProductListPresenterImpl(final ProductListView view, final List<Product> productList) {
-		setProductListView(view);
+		setView(view);
 		setProductList(productList);
 	}
 
@@ -32,11 +32,13 @@ public class ProductListPresenterImpl implements ProductListPresenter {
 		this.productList = productList;
 	}
 
-	public ProductListView getProductListView() {
+	@Override
+	public ProductListView getView() {
 		return view;
 	}
 
-	public void setProductListView(final ProductListView view) {
+	@Override
+	public void setView(final ProductListView view) {
 		this.view = view;
 		view.setPresenter(this);
 	}

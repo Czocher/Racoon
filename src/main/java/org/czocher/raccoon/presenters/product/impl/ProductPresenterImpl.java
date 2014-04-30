@@ -11,7 +11,7 @@ public class ProductPresenterImpl implements ProductPresenter {
 	private ProductView view;
 
 	public ProductPresenterImpl(final ProductView productView, final Product product) {
-		setProductView(productView);
+		setView(productView);
 		setProduct(product);
 	}
 
@@ -20,12 +20,14 @@ public class ProductPresenterImpl implements ProductPresenter {
 		return view.render();
 	}
 
-	private void setProductView(final ProductView productView) {
+	@Override
+	public void setView(final ProductView productView) {
 		view = productView;
 		view.setPresenter(this);
 	}
 
-	public ProductView getProductView() {
+	@Override
+	public ProductView getView() {
 		return view;
 	}
 

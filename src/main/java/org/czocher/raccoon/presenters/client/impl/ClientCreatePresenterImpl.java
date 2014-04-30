@@ -9,7 +9,7 @@ public class ClientCreatePresenterImpl implements ClientCreatePresenter {
 	private ClientCreateView view;
 
 	public ClientCreatePresenterImpl(final ClientCreateView clientCreateView) {
-		setClientCreateView(clientCreateView);
+		setView(clientCreateView);
 	}
 
 	@Override
@@ -17,12 +17,14 @@ public class ClientCreatePresenterImpl implements ClientCreatePresenter {
 		return view.render();
 	}
 
-	private void setClientCreateView(final ClientCreateView clientCreateView) {
+	@Override
+	public void setView(final ClientCreateView clientCreateView) {
 		view = clientCreateView;
 		view.setPresenter(this);
 	}
 
-	public ClientCreateView getClientCreateView() {
+	@Override
+	public ClientCreateView getView() {
 		return view;
 	}
 

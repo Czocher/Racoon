@@ -11,7 +11,7 @@ public class ClientPresenterImpl implements ClientPresenter {
 	private ClientView view;
 
 	public ClientPresenterImpl(final ClientView clientView, final Client client) {
-		setClientView(clientView);
+		setView(clientView);
 		setClient(client);
 	}
 
@@ -20,12 +20,14 @@ public class ClientPresenterImpl implements ClientPresenter {
 		return view.render();
 	}
 
-	private void setClientView(final ClientView clientView) {
+	@Override
+	public void setView(final ClientView clientView) {
 		view = clientView;
 		view.setPresenter(this);
 	}
 
-	public ClientView getClientView() {
+	@Override
+	public ClientView getView() {
 		return view;
 	}
 

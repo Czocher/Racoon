@@ -9,6 +9,7 @@ import java.util.Map;
 import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.client.ClientPresenter;
+import org.czocher.raccoon.views.client.ClientDeleteView;
 import org.czocher.raccoon.views.client.ClientView;
 import org.czocher.raccoon.views.order.OrderCreateView;
 import org.czocher.raccoon.views.order.OrderView;
@@ -40,6 +41,7 @@ public class ClientViewImpl implements ClientView {
 			throw new HTTPException(404, "File not found.");
 		}
 
+		values.put("clientDeletePath", ClientDeleteView.TAG);
 		values.put("orderPath", OrderView.TAG);
 		values.put("orderCreatePath", OrderCreateView.TAG);
 

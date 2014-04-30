@@ -8,4 +8,5 @@ public interface IndexPresenter extends Presenter {
 	IndexView getView();
 
 	void setView(IndexView view);
+
 }

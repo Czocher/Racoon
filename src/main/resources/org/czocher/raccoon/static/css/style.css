@@ -31,3 +31,7 @@ html,body,.container {
 [data-type='link'] {
 	cursor: pointer;
 }
+
+.delete {
+	float: right;
+}

@@ -11,7 +11,7 @@ public class OrderPresenterImpl implements OrderPresenter {
 	private OrderView view;
 
 	public OrderPresenterImpl(final OrderView orderView, final Order order) {
-		setOrderView(orderView);
+		setView(orderView);
 		setOrder(order);
 	}
 
@@ -20,12 +20,14 @@ public class OrderPresenterImpl implements OrderPresenter {
 		return view.render();
 	}
 
-	private void setOrderView(final OrderView orderView) {
+	@Override
+	public void setView(final OrderView orderView) {
 		view = orderView;
 		view.setPresenter(this);
 	}
 
-	public OrderView getOrderView() {
+	@Override
+	public OrderView getView() {
 		return view;
 	}
 

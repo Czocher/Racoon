@@ -13,7 +13,7 @@ public class OrderCreatePresenterImpl implements OrderCreatePresenter {
 	private List<Client> clientList;
 
 	public OrderCreatePresenterImpl(final OrderCreateView orderCreateView, final List<Client> clientList) {
-		setOrderCreateView(orderCreateView);
+		setView(orderCreateView);
 		setClientList(clientList);
 	}
 
@@ -22,12 +22,14 @@ public class OrderCreatePresenterImpl implements OrderCreatePresenter {
 		return view.render();
 	}
 
-	private void setOrderCreateView(final OrderCreateView orderCreateView) {
+	@Override
+	public void setView(final OrderCreateView orderCreateView) {
 		view = orderCreateView;
 		view.setPresenter(this);
 	}
 
-	public OrderCreateView getOrderCreateView() {
+	@Override
+	public OrderCreateView getView() {
 		return view;
 	}
 

@@ -13,7 +13,7 @@ public class OrderListPresenterImpl implements OrderListPresenter {
 	private OrderListView view;
 
 	public OrderListPresenterImpl(final OrderListView view, final List<Order> orderList) {
-		setOrderListView(view);
+		setView(view);
 		setOrderList(orderList);
 	}
 
@@ -32,11 +32,13 @@ public class OrderListPresenterImpl implements OrderListPresenter {
 		this.orderList = orderList;
 	}
 
-	public OrderListView getOrderListView() {
+	@Override
+	public OrderListView getView() {
 		return view;
 	}
 
-	public void setOrderListView(final OrderListView view) {
+	@Override
+	public void setView(final OrderListView view) {
 		this.view = view;
 		view.setPresenter(this);
 	}

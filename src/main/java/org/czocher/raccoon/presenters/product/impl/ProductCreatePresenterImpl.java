@@ -9,7 +9,7 @@ public class ProductCreatePresenterImpl implements ProductCreatePresenter {
 	private ProductCreateView view;
 
 	public ProductCreatePresenterImpl(final ProductCreateView productCreateView) {
-		setProductCreateView(productCreateView);
+		setView(productCreateView);
 	}
 
 	@Override
@@ -17,12 +17,14 @@ public class ProductCreatePresenterImpl implements ProductCreatePresenter {
 		return view.render();
 	}
 
-	private void setProductCreateView(final ProductCreateView productCreateView) {
+	@Override
+	public void setView(final ProductCreateView productCreateView) {
 		view = productCreateView;
 		view.setPresenter(this);
 	}
 
-	public ProductCreateView getProductCreateView() {
+	@Override
+	public ProductCreateView getView() {
 		return view;
 	}
 

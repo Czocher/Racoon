@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.czocher.raccoon.models.Product;
 import org.czocher.raccoon.presenters.Presenter;
+import org.czocher.raccoon.views.orderitem.OrderItemCreateView;
 
 public interface OrderItemCreatePresenter extends Presenter {
 
@@ -14,5 +15,9 @@ public interface OrderItemCreatePresenter extends Presenter {
 	int getOrderId();
 
 	void setOrderId(int orderId);
+
+	OrderItemCreateView getView();
+
+	void setView(OrderItemCreateView view);
 
 }

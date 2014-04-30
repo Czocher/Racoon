@@ -14,7 +14,7 @@ public class OrderItemCreatePresenterImpl implements OrderItemCreatePresenter {
 	private int orderId;
 
 	public OrderItemCreatePresenterImpl(final OrderItemCreateView orderItemCreateView, final int orderId, final List<Product> productList) {
-		setOrderItemCreateView(orderItemCreateView);
+		setView(orderItemCreateView);
 		setOrderId(orderId);
 		setProductList(productList);
 	}
@@ -24,12 +24,14 @@ public class OrderItemCreatePresenterImpl implements OrderItemCreatePresenter {
 		return view.render();
 	}
 
-	private void setOrderItemCreateView(final OrderItemCreateView orderItemCreateView) {
+	@Override
+	public void setView(final OrderItemCreateView orderItemCreateView) {
 		view = orderItemCreateView;
 		view.setPresenter(this);
 	}
 
-	public OrderItemCreateView getOrderItemCreateView() {
+	@Override
+	public OrderItemCreateView getView() {
 		return view;
 	}
 

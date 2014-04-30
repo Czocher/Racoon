@@ -13,7 +13,7 @@ public class ClientListPresenterImpl implements ClientListPresenter {
 	private ClientListView view;
 
 	public ClientListPresenterImpl(final ClientListView clientListView, final List<Client> clientList) {
-		setClientListView(clientListView);
+		setView(clientListView);
 		setClientList(clientList);
 	}
 
@@ -22,12 +22,14 @@ public class ClientListPresenterImpl implements ClientListPresenter {
 		return view.render();
 	}
 
-	private void setClientListView(final ClientListView clientListView) {
+	@Override
+	public void setView(final ClientListView clientListView) {
 		view = clientListView;
 		view.setPresenter(this);
 	}
 
-	public ClientListView getClientListView() {
+	@Override
+	public ClientListView getView() {
 		return view;
 	}
 
