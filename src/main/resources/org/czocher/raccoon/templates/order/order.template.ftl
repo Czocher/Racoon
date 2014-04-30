@@ -1,4 +1,4 @@
-<#import "master.template.ftl" as m> <@m.template>
+<#import "../master.template.ftl" as m> <@m.template>
 	<h1>Order #${order.id}</h1>
 	<ul>
 		<li>Client: <a href="/${clientPath}?id=${order.client.id}">${order.client.name}</a></li>

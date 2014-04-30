@@ -21,7 +21,7 @@ public class OrderItemCreateViewImpl implements OrderItemCreateView {
 
 	public OrderItemCreateViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("orderItemCreate.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("orderItem/orderItemCreate.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

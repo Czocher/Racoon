@@ -21,7 +21,7 @@ public class ClientCreateViewImpl implements ClientCreateView {
 
 	public ClientCreateViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("clientCreate.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("client/clientCreate.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

@@ -21,7 +21,7 @@ public class ProductViewImpl implements ProductView {
 
 	public ProductViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("product.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("product/product.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

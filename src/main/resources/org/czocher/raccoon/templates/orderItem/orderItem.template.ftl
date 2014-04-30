@@ -1,4 +1,4 @@
-<#import "master.template.ftl" as m>
+<#import "../master.template.ftl" as m>
 <@m.template>
 	<h1>Order item #${orderItem.id}</h1>
 	<ul>

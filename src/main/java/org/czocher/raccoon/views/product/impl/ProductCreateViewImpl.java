@@ -21,7 +21,7 @@ public class ProductCreateViewImpl implements ProductCreateView {
 
 	public ProductCreateViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("productCreate.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("product/productCreate.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

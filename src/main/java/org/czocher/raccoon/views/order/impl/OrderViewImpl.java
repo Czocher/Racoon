@@ -24,7 +24,7 @@ public class OrderViewImpl implements OrderView {
 
 	public OrderViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("order.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("order/order.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

@@ -22,7 +22,7 @@ public class ProductListViewImpl implements ProductListView {
 
 	public ProductListViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("productList.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("product/productList.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

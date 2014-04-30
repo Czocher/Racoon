@@ -22,7 +22,7 @@ public class ClientListViewImpl implements ClientListView {
 
 	public ClientListViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("clientList.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("client/clientList.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

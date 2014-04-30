@@ -1,4 +1,4 @@
-<#import "master.template.ftl" as m>
+<#import "../master.template.ftl" as m>
 <@m.template>
 	<h1>New client</h1>
 	<form role="form" id="form" action="/${orderItemCreatePath}" method="post">

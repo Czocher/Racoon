@@ -1,7 +1,7 @@
-<#import "master.template.ftl" as m>
+<#import "../master.template.ftl" as m>
 <@m.template>
-			<h1>List of products:</h1>
-			<#if productList?has_content>
+			<h1>List of clients:</h1>
+			<#if clientList?has_content>
 				<table class="table table-hover table-striped">
 					<thead>
 						<tr>
@@ -10,8 +10,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<#list productList as item>
-							<tr data-type="link" href="/${productPath}?id=${item.id}">
+						<#list clientList as item>
+							<tr data-type="link" href="/${clientPath}?id=${item.id}">
 								<td>${item.id}</td>
 								<td>${item.name}</td>
 							</tr>
@@ -26,9 +26,8 @@
 					});
 				</script>
 			<#else>
-				<div class="list-group-item">No products specified.</div>
+				<div class="list-group-item">No clients specified.</div>
 			</#if>
-				
-			<a href="/${productCreatePath}" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add product</a>
-			
+		
+			<a href="/${clientCreatePath}" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add client</a>
 </@m.template>

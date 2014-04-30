@@ -22,7 +22,7 @@ public class OrderListViewImpl implements OrderListView {
 
 	public OrderListViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("orderList.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("order/orderList.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}

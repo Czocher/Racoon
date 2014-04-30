@@ -1,4 +1,4 @@
-<#import "master.template.ftl" as m>
+<#import "../master.template.ftl" as m>
 <@m.template>
 			<h1>List of orders:</h1>
 			<#if orderList?has_content>
