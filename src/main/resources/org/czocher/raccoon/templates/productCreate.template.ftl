@@ -1,11 +1,11 @@
 <#import "master.template.ftl" as m>
 <@m.template>
-	<h1>New client</h1>
-	<form role="form" id="form" action="/${clientCreatePath}" method="post">
+	<h1>New product</h1>
+	<form role="form" id="form" action="/${productCreatePath}" method="post">
 		<div class="form-group">
-			<label class="sr-only" for="name">Client name</label>
+			<label class="sr-only" for="name">Product name</label>
 			<input type="text" class="form-control" id="name" name="name"
-				placeholder="Enter client name" required>
+				placeholder="Enter product name" required>
 		</div>
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>

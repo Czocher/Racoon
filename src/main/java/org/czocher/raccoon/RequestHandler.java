@@ -11,21 +11,22 @@ import org.czocher.raccoon.models.Client;
 import org.czocher.raccoon.models.Order;
 import org.czocher.raccoon.models.OrderItem;
 import org.czocher.raccoon.models.Product;
+import org.czocher.raccoon.presenters.client.impl.ClientCreatePresenterImpl;
 import org.czocher.raccoon.presenters.client.impl.ClientListPresenterImpl;
 import org.czocher.raccoon.presenters.client.impl.ClientPresenterImpl;
-import org.czocher.raccoon.presenters.client.impl.ClientCreatePresenterImpl;
 import org.czocher.raccoon.presenters.index.impl.IndexPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderPresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemPresenterImpl;
+import org.czocher.raccoon.presenters.product.impl.ProductCreatePresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductListPresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductPresenterImpl;
+import org.czocher.raccoon.views.client.ClientCreateView;
 import org.czocher.raccoon.views.client.ClientListView;
 import org.czocher.raccoon.views.client.ClientView;
-import org.czocher.raccoon.views.client.ClientCreateView;
+import org.czocher.raccoon.views.client.impl.ClientCreateViewImpl;
 import org.czocher.raccoon.views.client.impl.ClientListViewImpl;
 import org.czocher.raccoon.views.client.impl.ClientViewImpl;
-import org.czocher.raccoon.views.client.impl.ClientCreateViewImpl;
 import org.czocher.raccoon.views.index.IndexView;
 import org.czocher.raccoon.views.index.impl.IndexViewImpl;
 import org.czocher.raccoon.views.order.OrderListView;
@@ -34,8 +35,10 @@ import org.czocher.raccoon.views.order.impl.OrderListViewImpl;
 import org.czocher.raccoon.views.order.impl.OrderViewImpl;
 import org.czocher.raccoon.views.orderitem.OrderItemView;
 import org.czocher.raccoon.views.orderitem.impl.OrderItemViewImpl;
+import org.czocher.raccoon.views.product.ProductCreateView;
 import org.czocher.raccoon.views.product.ProductListView;
 import org.czocher.raccoon.views.product.ProductView;
+import org.czocher.raccoon.views.product.impl.ProductCreateViewImpl;
 import org.czocher.raccoon.views.product.impl.ProductListViewImpl;
 import org.czocher.raccoon.views.product.impl.ProductViewImpl;
 import org.javalite.activejdbc.Base;
@@ -59,6 +62,7 @@ class RequestHandler implements HttpHandler {
 	private ClientCreateViewImpl clientCreateView;
 	private String response;
 	private int code;
+	private ProductCreateViewImpl productCreateView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -118,6 +122,8 @@ class RequestHandler implements HttpHandler {
 			routeOrderItem(params);
 		} else if (uri.matches("^/" + ClientCreateView.TAG)) {
 			routeClientCreate(request, params);
+		} else if (uri.matches("^/" + ProductCreateView.TAG)) {
+			routeProductCreate(request, params);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
@@ -129,6 +135,27 @@ class RequestHandler implements HttpHandler {
 		os.close();
 		request.close();
 		System.out.println("Request for " + uri + " handled: " + code);
+	}
+
+	private void routeProductCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+		Product n;
+		if (productCreateView == null) {
+			productCreateView = new ProductCreateViewImpl();
+		}
+		if (request.getRequestMethod().equals("POST")) {
+			if (!params.containsKey("name") || params.get("name") == null || params.get("name").toString().isEmpty()) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			n = new Product(params.get("name").toString());
+			n.saveIt();
+
+			request.getResponseHeaders().add("Location", "/" + ProductView.TAG + "?id=" + n.getId());
+			code = 307;
+			response = "Redirecting...";
+		} else {
+			response = new ProductCreatePresenterImpl(productCreateView).go();
+		}
 	}
 
 	private void routeClientCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {

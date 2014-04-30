@@ -29,6 +29,6 @@
 				<div class="list-group-item">No products specified.</div>
 			</#if>
 				
-			<a href="/add/order" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add product</a>
+			<a href="/${productCreatePath}" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> Add product</a>
 			
 </@m.template>
