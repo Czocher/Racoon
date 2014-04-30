@@ -57,6 +57,8 @@ class RequestHandler implements HttpHandler {
 	private OrderViewImpl orderView;
 	private OrderItemViewImpl orderItemView;
 	private NewClientViewImpl newClientView;
+	private String response;
+	private int code;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -95,27 +97,27 @@ class RequestHandler implements HttpHandler {
 		final String uri = request.getRequestURI().getRawPath();
 		@SuppressWarnings("unchecked")
 		final Map<String, Object> params = (Map<String, Object>) request.getAttribute("parameters");
-		final int code = 200;
-		String response;
+		code = 200;
+		response = "";
 
 		if (uri.matches("^/" + IndexView.TAG)) {
-			response = routeIndex();
+			routeIndex();
 		} else if (uri.matches("^/" + ClientListView.TAG)) {
-			response = routeClientList();
+			routeClientList();
 		} else if (uri.matches("^/" + ProductListView.TAG)) {
-			response = routeProductList();
+			routeProductList();
 		} else if (uri.matches("^/" + OrderListView.TAG)) {
-			response = routeOrderList();
+			routeOrderList();
 		} else if (uri.matches("^/" + ClientView.TAG)) {
-			response = routeClient(params);
+			routeClient(params);
 		} else if (uri.matches("^/" + ProductView.TAG)) {
-			response = routeProduct(params);
+			routeProduct(params);
 		} else if (uri.matches("^/" + OrderView.TAG)) {
-			response = routeOrder(params);
+			routeOrder(params);
 		} else if (uri.matches("^/" + OrderItemView.TAG)) {
-			response = routeOrderItem(params);
+			routeOrderItem(params);
 		} else if (uri.matches("^/" + NewClientView.TAG)) {
-			response = routeNewClient(request, params);
+			routeNewClient(request, params);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
@@ -129,14 +131,10 @@ class RequestHandler implements HttpHandler {
 		System.out.println("Request for " + uri + " handled: " + code);
 	}
 
-	private String routeNewClient(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
-		String response;
+	private void routeNewClient(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
 		Client n;
 		if (newClientView == null) {
 			newClientView = new NewClientViewImpl();
-		}
-		if (clientView == null) {
-			clientView = new ClientViewImpl();
 		}
 		if (request.getRequestMethod().equals("POST")) {
 			if (!params.containsKey("name") || params.get("name") == null || params.get("name").toString().isEmpty()) {
@@ -146,15 +144,16 @@ class RequestHandler implements HttpHandler {
 			n = new Client(params.get("name").toString());
 			n.saveIt();
 
-			response = new ClientPresenterImpl(clientView, n).go();
+			request.getResponseHeaders().add("Location", "/" + ClientView.TAG + "?id=" + n.getId());
+			code = 307;
+			response = "Redirecting...";
 		} else {
 			response = new NewClientPresenterImpl(newClientView).go();
 		}
-		return response;
 	}
 
-	private String routeOrderItem(final Map<String, Object> params) throws HTTPException {
-		String response;
+	private void routeOrderItem(final Map<String, Object> params) throws HTTPException {
+
 		if (orderItemView == null) {
 			orderItemView = new OrderItemViewImpl();
 		}
@@ -167,11 +166,11 @@ class RequestHandler implements HttpHandler {
 		}
 
 		response = new OrderItemPresenterImpl(orderItemView, OrderItem.findById(id)).go();
-		return response;
+
 	}
 
-	private String routeOrder(final Map<String, Object> params) throws HTTPException {
-		String response;
+	private void routeOrder(final Map<String, Object> params) throws HTTPException {
+
 		if (orderView == null) {
 			orderView = new OrderViewImpl();
 		}
@@ -184,11 +183,11 @@ class RequestHandler implements HttpHandler {
 		}
 
 		response = new OrderPresenterImpl(orderView, Order.findById(id)).go();
-		return response;
+
 	}
 
-	private String routeProduct(final Map<String, Object> params) throws HTTPException {
-		String response;
+	private void routeProduct(final Map<String, Object> params) throws HTTPException {
+
 		if (productView == null) {
 			productView = new ProductViewImpl();
 		}
@@ -201,11 +200,11 @@ class RequestHandler implements HttpHandler {
 		}
 
 		response = new ProductPresenterImpl(productView, Product.findById(id)).go();
-		return response;
+
 	}
 
-	private String routeClient(final Map<String, Object> params) throws HTTPException {
-		String response;
+	private void routeClient(final Map<String, Object> params) throws HTTPException {
+
 		if (clientView == null) {
 			clientView = new ClientViewImpl();
 		}
@@ -218,46 +217,47 @@ class RequestHandler implements HttpHandler {
 		}
 
 		response = new ClientPresenterImpl(clientView, Client.findById(id)).go();
-		return response;
+
 	}
 
-	private String routeOrderList() throws HTTPException {
-		String response;
+	private void routeOrderList() throws HTTPException {
+
 		if (orderListView == null) {
 			orderListView = new OrderListViewImpl();
 		}
 
 		response = new OrderListPresenterImpl(orderListView, Order.findAll()).go();
-		return response;
+
 	}
 
-	private String routeProductList() throws HTTPException {
-		String response;
+	private void routeProductList() throws HTTPException {
+
 		if (productListView == null) {
 			productListView = new ProductListViewImpl();
 		}
 
 		response = new ProductListPresenterImpl(productListView, Product.findAll()).go();
-		return response;
+
 	}
 
-	private String routeClientList() throws HTTPException {
-		String response;
+	private void routeClientList() throws HTTPException {
+		;
 		if (clientListView == null) {
 			clientListView = new ClientListViewImpl();
 		}
 
 		response = new ClientListPresenterImpl(clientListView, Client.findAll()).go();
-		return response;
+
 	}
 
-	private String routeIndex() throws HTTPException {
-		String response;
+	private void routeIndex() throws HTTPException {
+
 		if (indexView == null) {
 			indexView = new IndexViewImpl();
 		}
+
 		response = new IndexPresenterImpl(indexView).go();
-		return response;
+
 	}
 
 	private static void openDatabaseConnection() {

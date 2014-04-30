@@ -5,7 +5,7 @@ import org.czocher.raccoon.views.View;
 
 public interface NewClientView extends View {
 
-	static String TAG = "new/client";
+	static String TAG = "create/client";
 
 	NewClientPresenter getPresenter();
 
