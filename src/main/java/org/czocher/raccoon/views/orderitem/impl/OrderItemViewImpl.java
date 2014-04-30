@@ -10,6 +10,7 @@ import org.czocher.raccoon.AppDriver;
 import org.czocher.raccoon.presenters.orderitem.OrderItemPresenter;
 import org.czocher.raccoon.views.client.ClientView;
 import org.czocher.raccoon.views.order.OrderView;
+import org.czocher.raccoon.views.orderitem.OrderItemDeleteView;
 import org.czocher.raccoon.views.orderitem.OrderItemView;
 import org.czocher.raccoon.views.product.ProductView;
 
@@ -35,6 +36,8 @@ public class OrderItemViewImpl implements OrderItemView {
 		final Map<String, Object> values = new HashMap<>();
 
 		values.put("orderItem", presenter.getOrderItem());
+
+		values.put("orderItemDeletePath", OrderItemDeleteView.TAG);
 
 		values.put("productPath", ProductView.TAG);
 		values.put("orderPath", OrderView.TAG);

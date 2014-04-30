@@ -16,6 +16,7 @@ import org.czocher.raccoon.presenters.order.impl.OrderDeletePresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderPresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemCreatePresenterImpl;
+import org.czocher.raccoon.presenters.orderitem.impl.OrderItemDeletePresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemPresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductCreatePresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductDeletePresenterImpl;
@@ -40,8 +41,10 @@ import org.czocher.raccoon.views.order.impl.OrderDeleteViewImpl;
 import org.czocher.raccoon.views.order.impl.OrderListViewImpl;
 import org.czocher.raccoon.views.order.impl.OrderViewImpl;
 import org.czocher.raccoon.views.orderitem.OrderItemCreateView;
+import org.czocher.raccoon.views.orderitem.OrderItemDeleteView;
 import org.czocher.raccoon.views.orderitem.OrderItemView;
 import org.czocher.raccoon.views.orderitem.impl.OrderItemCreateViewImpl;
+import org.czocher.raccoon.views.orderitem.impl.OrderItemDeleteViewImpl;
 import org.czocher.raccoon.views.orderitem.impl.OrderItemViewImpl;
 import org.czocher.raccoon.views.product.ProductCreateView;
 import org.czocher.raccoon.views.product.ProductDeleteView;
@@ -65,17 +68,18 @@ class RequestHandler implements HttpHandler {
 	private ClientListView clientListView;
 	private OrderListView orderListView;
 	private ClientView clientView;
-	private ProductListViewImpl productListView;
-	private ProductViewImpl productView;
-	private OrderViewImpl orderView;
-	private OrderItemViewImpl orderItemView;
-	private ClientCreateViewImpl clientCreateView;
-	private ProductCreateViewImpl productCreateView;
-	private OrderCreateViewImpl orderCreateView;
-	private OrderItemCreateViewImpl orderItemCreateView;
-	private ClientDeleteViewImpl clientDeleteView;
+	private ProductListView productListView;
+	private ProductView productView;
+	private OrderView orderView;
+	private OrderItemView orderItemView;
+	private ClientCreateView clientCreateView;
+	private ProductCreateView productCreateView;
+	private OrderCreateView orderCreateView;
+	private OrderItemCreateView orderItemCreateView;
+	private ClientDeleteView clientDeleteView;
 	private OrderDeleteView orderDeleteView;
-	private ProductDeleteViewImpl productDeleteView;
+	private ProductDeleteView productDeleteView;
+	private OrderItemDeleteView orderItemDeleteView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -143,11 +147,21 @@ class RequestHandler implements HttpHandler {
 			routeProductDelete(request);
 		} else if (uri.matches("^/" + OrderDeleteView.TAG)) {
 			routeOrderDelete(request);
+		} else if (uri.matches("^/" + OrderItemDeleteView.TAG)) {
+			routeOrderItemDelete(request);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
 
 		System.out.println("Request for " + uri + " handled: " + request.getResponseCode());
+	}
+
+	private void routeOrderItemDelete(final HttpExchange request) throws HTTPException {
+		if (orderItemDeleteView == null) {
+			orderItemDeleteView = new OrderItemDeleteViewImpl();
+		}
+
+		new OrderItemDeletePresenterImpl(orderItemDeleteView).go(request);
 	}
 
 	private void routeProductDelete(final HttpExchange request) throws HTTPException {
