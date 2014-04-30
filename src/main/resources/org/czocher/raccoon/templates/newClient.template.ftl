@@ -10,7 +10,7 @@
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>
 	<script>
-		${document}.ready(new function(){
+		$(document).ready(new function(){
 			$("#form").validate();
 		});
 	</script>
