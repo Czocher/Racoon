@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.order.OrderPresenter;
 import org.czocher.raccoon.views.client.ClientView;
 import org.czocher.raccoon.views.order.OrderDeleteView;
@@ -32,15 +31,11 @@ public class OrderViewImpl implements OrderView {
 	}
 
 	@Override
-	public String render() throws HTTPException {
+	public String render() {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		if (presenter.getOrder() != null) {
-			values.put("order", presenter.getOrder());
-		} else {
-			throw new HTTPException(404, "File not found.");
-		}
+		values.put("order", presenter.getOrder());
 
 		values.put("orderDeletePath", OrderDeleteView.TAG);
 		values.put("orderItemPath", OrderItemView.TAG);

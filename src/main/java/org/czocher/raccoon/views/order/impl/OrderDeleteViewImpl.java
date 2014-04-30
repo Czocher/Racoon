@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.order.OrderDeletePresenter;
 import org.czocher.raccoon.views.order.OrderDeleteView;
 
@@ -26,7 +25,7 @@ public class OrderDeleteViewImpl implements OrderDeleteView {
 	}
 
 	@Override
-	public String render() throws HTTPException {
+	public String render() {
 		final Writer out = new StringWriter();
 
 		try {

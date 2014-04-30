@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.client.ClientDeletePresenter;
 import org.czocher.raccoon.views.client.ClientDeleteView;
 
@@ -26,7 +25,7 @@ public class ClientDeleteViewImpl implements ClientDeleteView {
 	}
 
 	@Override
-	public String render() throws HTTPException {
+	public String render() {
 		final Writer out = new StringWriter();
 
 		try {

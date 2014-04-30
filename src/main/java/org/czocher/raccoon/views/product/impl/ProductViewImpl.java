@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.product.ProductPresenter;
 import org.czocher.raccoon.views.product.ProductView;
 
@@ -28,15 +27,11 @@ public class ProductViewImpl implements ProductView {
 	}
 
 	@Override
-	public String render() throws HTTPException {
+	public String render() {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		if (presenter.getProduct() != null) {
-			values.put("product", presenter.getProduct());
-		} else {
-			throw new HTTPException(404, "File not found.");
-		}
+		values.put("product", presenter.getProduct());
 
 		try {
 			template.process(values, out);

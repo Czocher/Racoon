@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.order.OrderCreatePresenter;
 import org.czocher.raccoon.views.order.OrderCreateView;
 
@@ -28,7 +27,7 @@ public class OrderCreateViewImpl implements OrderCreateView {
 	}
 
 	@Override
-	public String render() throws HTTPException {
+	public String render() {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 

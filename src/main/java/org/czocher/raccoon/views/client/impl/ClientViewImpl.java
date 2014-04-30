@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.presenters.client.ClientPresenter;
 import org.czocher.raccoon.views.client.ClientDeleteView;
 import org.czocher.raccoon.views.client.ClientView;
@@ -31,15 +30,11 @@ public class ClientViewImpl implements ClientView {
 	}
 
 	@Override
-	public String render() throws HTTPException {
+	public String render() {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		if (presenter.getClient() != null) {
-			values.put("client", presenter.getClient());
-		} else {
-			throw new HTTPException(404, "File not found.");
-		}
+		values.put("client", presenter.getClient());
 
 		values.put("clientDeletePath", ClientDeleteView.TAG);
 		values.put("orderPath", OrderView.TAG);

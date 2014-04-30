@@ -1,23 +1,23 @@
 package org.czocher.raccoon.presenters.client.impl;
 
+import static org.czocher.raccoon.shortcuts.Shortcuts.RenderViewToResponse;
+
+import java.util.Map;
+
 import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.models.Client;
 import org.czocher.raccoon.presenters.client.ClientPresenter;
 import org.czocher.raccoon.views.client.ClientView;
+
+import com.sun.net.httpserver.HttpExchange;
 
 public class ClientPresenterImpl implements ClientPresenter {
 
 	private Client client;
 	private ClientView view;
 
-	public ClientPresenterImpl(final ClientView clientView, final Client client) {
+	public ClientPresenterImpl(final ClientView clientView) {
 		setView(clientView);
-		setClient(client);
-	}
-
-	@Override
-	public String go() throws HTTPException {
-		return view.render();
 	}
 
 	@Override
@@ -39,6 +39,28 @@ public class ClientPresenterImpl implements ClientPresenter {
 	@Override
 	public void setClient(final Client client) {
 		this.client = client;
+	}
+
+	@Override
+	public void go(final HttpExchange request) throws HTTPException {
+		@SuppressWarnings("unchecked")
+		final Map<String, Object> params = (Map<String, Object>) request.getAttribute("parameters");
+
+		int id = 0;
+		try {
+			id = Integer.parseInt((String) params.get("id"));
+		} catch (final NumberFormatException e) {
+			throw new HTTPException(404, "File not found.");
+		}
+
+		final Client c = Client.findById(id);
+		if (c == null) {
+			throw new HTTPException(404, "File not found.");
+		}
+
+		setClient(c);
+
+		RenderViewToResponse(view, request);
 	}
 
 }

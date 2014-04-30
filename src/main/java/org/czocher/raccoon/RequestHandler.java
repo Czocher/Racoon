@@ -1,16 +1,11 @@
 package org.czocher.raccoon;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.czocher.raccoon.models.Client;
-import org.czocher.raccoon.models.Order;
-import org.czocher.raccoon.models.OrderItem;
-import org.czocher.raccoon.models.Product;
 import org.czocher.raccoon.presenters.client.impl.ClientCreatePresenterImpl;
 import org.czocher.raccoon.presenters.client.impl.ClientDeletePresenterImpl;
 import org.czocher.raccoon.presenters.client.impl.ClientListPresenterImpl;
@@ -72,8 +67,6 @@ class RequestHandler implements HttpHandler {
 	private OrderViewImpl orderView;
 	private OrderItemViewImpl orderItemView;
 	private ClientCreateViewImpl clientCreateView;
-	private String response;
-	private int code;
 	private ProductCreateViewImpl productCreateView;
 	private OrderCreateViewImpl orderCreateView;
 	private OrderItemCreateViewImpl orderItemCreateView;
@@ -117,25 +110,23 @@ class RequestHandler implements HttpHandler {
 		final String uri = request.getRequestURI().getRawPath();
 		@SuppressWarnings("unchecked")
 		final Map<String, Object> params = (Map<String, Object>) request.getAttribute("parameters");
-		code = 200;
-		response = "";
 
 		if (uri.matches("^/" + IndexView.TAG)) {
-			routeIndex();
+			routeIndex(request);
 		} else if (uri.matches("^/" + ClientListView.TAG)) {
-			routeClientList();
+			routeClientList(request);
 		} else if (uri.matches("^/" + ProductListView.TAG)) {
-			routeProductList();
+			routeProductList(request);
 		} else if (uri.matches("^/" + OrderListView.TAG)) {
-			routeOrderList();
+			routeOrderList(request);
 		} else if (uri.matches("^/" + ClientView.TAG)) {
-			routeClient(params);
+			routeClient(request, params);
 		} else if (uri.matches("^/" + ProductView.TAG)) {
-			routeProduct(params);
+			routeProduct(request, params);
 		} else if (uri.matches("^/" + OrderView.TAG)) {
-			routeOrder(params);
+			routeOrder(request, params);
 		} else if (uri.matches("^/" + OrderItemView.TAG)) {
-			routeOrderItem(params);
+			routeOrderItem(request, params);
 		} else if (uri.matches("^/" + ClientCreateView.TAG)) {
 			routeClientCreate(request, params);
 		} else if (uri.matches("^/" + ProductCreateView.TAG)) {
@@ -152,13 +143,7 @@ class RequestHandler implements HttpHandler {
 			throw new HTTPException(404, "File not found.");
 		}
 
-		request.sendResponseHeaders(code, response.getBytes().length);
-		final OutputStream os = request.getResponseBody();
-		os.write(response.getBytes());
-
-		os.close();
-		request.close();
-		System.out.println("Request for " + uri + " handled: " + code);
+		System.out.println("Request for " + uri + " handled: " + request.getResponseCode());
 	}
 
 	private void routeOrderDelete(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
@@ -166,293 +151,132 @@ class RequestHandler implements HttpHandler {
 			orderDeleteView = new OrderDeleteViewImpl();
 		}
 
-		if (!params.containsKey("id") || params.get("id") == null || params.get("id").toString().isEmpty()) {
-			throw new HTTPException(400, "Bad request.");
-		}
+		new OrderDeletePresenterImpl(orderDeleteView).go(request);
 
-		int id = 0;
-		try {
-			id = Integer.parseInt((String) params.get("id"));
-		} catch (final NumberFormatException e) {
-			throw new HTTPException(400, "Bad request.");
-		}
-
-		final Order o = Order.findById(id);
-
-		if (o == null) {
-			throw new HTTPException(400, "Bad request.");
-		} else {
-			o.delete(true);
-			response = new OrderDeletePresenterImpl(orderDeleteView).go();
-		}
 	}
 
-	private void routeClientDelete(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+	private void routeClientDelete(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
 		if (clientDeleteView == null) {
 			clientDeleteView = new ClientDeleteViewImpl();
 		}
 
-		if (!params.containsKey("id") || params.get("id") == null || params.get("id").toString().isEmpty()) {
-			throw new HTTPException(400, "Bad request.");
-		}
-
-		int id = 0;
-		try {
-			id = Integer.parseInt((String) params.get("id"));
-		} catch (final NumberFormatException e) {
-			throw new HTTPException(400, "Bad request.");
-		}
-
-		final Client c = Client.findById(id);
-
-		if (c == null) {
-			throw new HTTPException(400, "Bad request.");
-		} else {
-			c.delete(true);
-			response = new ClientDeletePresenterImpl(clientDeleteView).go();
-		}
+		new ClientDeletePresenterImpl(clientDeleteView).go(request);
 	}
 
-	private void routeOrderItemCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
-		OrderItem n;
+	private void routeOrderItemCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
+
 		if (orderItemCreateView == null) {
 			orderItemCreateView = new OrderItemCreateViewImpl();
 		}
-		if (request.getRequestMethod().equals("POST")) {
 
-			if (!params.containsKey("productId") || params.get("productId") == null || params.get("productId").toString().isEmpty()) {
-				throw new HTTPException(400, "Bad request.");
-			}
+		new OrderItemCreatePresenterImpl(orderItemCreateView).go(request);
 
-			if (!params.containsKey("orderId") || params.get("orderId") == null || params.get("productId").toString().isEmpty()) {
-				throw new HTTPException(400, "Bad request.");
-			}
-
-			if (!params.containsKey("quantity") || params.get("quantity") == null || params.get("quantity").toString().isEmpty()) {
-				throw new HTTPException(400, "Bad request.");
-			}
-
-			int productId = 0;
-			int orderId = 0;
-			int quantity = 0;
-			try {
-				productId = Integer.parseInt((String) params.get("productId"));
-				orderId = Integer.parseInt((String) params.get("orderId"));
-				quantity = Integer.parseInt((String) params.get("quantity"));
-			} catch (final NumberFormatException e) {
-				throw new HTTPException(400, "Bad request.");
-			}
-
-			n = new OrderItem(quantity);
-			final Order o = Order.findById(orderId);
-			final Product p = Product.findById(productId);
-
-			if (o == null || p == null) {
-				throw new HTTPException(400, "Bad request.");
-			}
-
-			o.addOrderItem(n);
-			p.addOrderItem(n);
-
-			request.getResponseHeaders().add("Location", "/" + OrderView.TAG + "?id=" + o.getId());
-			code = 307;
-			response = "Redirecting...";
-		} else if (request.getRequestMethod().equals("GET") && params.containsKey("orderId")) {
-
-			int orderId = 0;
-			try {
-				orderId = Integer.parseInt((String) params.get("orderId"));
-			} catch (final NumberFormatException e) {
-				throw new HTTPException(400, "Bad request.");
-			}
-
-			response = new OrderItemCreatePresenterImpl(orderItemCreateView, orderId, Product.findAll()).go();
-		} else {
-			throw new HTTPException(400, "Bad request.");
-		}
 	}
 
 	private void routeOrderCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
-		Order n;
+
 		if (orderCreateView == null) {
 			orderCreateView = new OrderCreateViewImpl();
 		}
-		if (request.getRequestMethod().equals("POST") || request.getRequestMethod().equals("GET") && params.containsKey("clientId")) {
-			if (!params.containsKey("clientId") || params.get("clientId") == null || params.get("clientId").toString().isEmpty()) {
-				throw new HTTPException(400, "Bad request.");
-			}
 
-			int id = 0;
-			try {
-				id = Integer.parseInt((String) params.get("clientId"));
-			} catch (final NumberFormatException e) {
-				throw new HTTPException(400, "Bad request.");
-			}
-
-			n = new Order();
-			final Client c = Client.findById(id);
-
-			if (c == null) {
-				throw new HTTPException(400, "Bad request.");
-			}
-
-			c.addOrder(n);
-
-			request.getResponseHeaders().add("Location", "/" + OrderView.TAG + "?id=" + n.getId());
-			code = 307;
-			response = "Redirecting...";
-		} else {
-			response = new OrderCreatePresenterImpl(orderCreateView, Client.findAll()).go();
-		}
+		new OrderCreatePresenterImpl(orderCreateView).go(request);
 	}
 
 	private void routeProductCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
-		Product n;
+
 		if (productCreateView == null) {
 			productCreateView = new ProductCreateViewImpl();
 		}
-		if (request.getRequestMethod().equals("POST")) {
-			if (!params.containsKey("name") || params.get("name") == null || params.get("name").toString().isEmpty()) {
-				throw new HTTPException(400, "Bad request.");
-			}
 
-			n = new Product(params.get("name").toString());
-			n.saveIt();
-
-			request.getResponseHeaders().add("Location", "/" + ProductView.TAG + "?id=" + n.getId());
-			code = 307;
-			response = "Redirecting...";
-		} else {
-			response = new ProductCreatePresenterImpl(productCreateView).go();
-		}
+		new ProductCreatePresenterImpl(productCreateView).go(request);
 	}
 
 	private void routeClientCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
-		Client n;
+
 		if (clientCreateView == null) {
 			clientCreateView = new ClientCreateViewImpl();
 		}
-		if (request.getRequestMethod().equals("POST")) {
-			if (!params.containsKey("name") || params.get("name") == null || params.get("name").toString().isEmpty()) {
-				throw new HTTPException(400, "Bad request.");
-			}
 
-			n = new Client(params.get("name").toString());
-			n.saveIt();
-
-			request.getResponseHeaders().add("Location", "/" + ClientView.TAG + "?id=" + n.getId());
-			code = 307;
-			response = "Redirecting...";
-		} else {
-			response = new ClientCreatePresenterImpl(clientCreateView).go();
-		}
+		new ClientCreatePresenterImpl(clientCreateView).go(request);
 	}
 
-	private void routeOrderItem(final Map<String, Object> params) throws HTTPException {
+	private void routeOrderItem(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
 
 		if (orderItemView == null) {
 			orderItemView = new OrderItemViewImpl();
 		}
 
-		int id = 0;
-		try {
-			id = Integer.parseInt((String) params.get("id"));
-		} catch (final NumberFormatException e) {
-			throw new HTTPException(404, "File not found.");
-		}
-
-		response = new OrderItemPresenterImpl(orderItemView, OrderItem.findById(id)).go();
+		new OrderItemPresenterImpl(orderItemView).go(request);
 
 	}
 
-	private void routeOrder(final Map<String, Object> params) throws HTTPException {
+	private void routeOrder(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
 
 		if (orderView == null) {
 			orderView = new OrderViewImpl();
 		}
 
-		int id = 0;
-		try {
-			id = Integer.parseInt((String) params.get("id"));
-		} catch (final NumberFormatException e) {
-			throw new HTTPException(404, "File not found.");
-		}
-
-		response = new OrderPresenterImpl(orderView, Order.findById(id)).go();
+		new OrderPresenterImpl(orderView).go(request);
 
 	}
 
-	private void routeProduct(final Map<String, Object> params) throws HTTPException {
+	private void routeProduct(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
 
 		if (productView == null) {
 			productView = new ProductViewImpl();
 		}
 
-		int id = 0;
-		try {
-			id = Integer.parseInt((String) params.get("id"));
-		} catch (final NumberFormatException e) {
-			throw new HTTPException(404, "File not found.");
-		}
-
-		response = new ProductPresenterImpl(productView, Product.findById(id)).go();
+		new ProductPresenterImpl(productView).go(request);
 
 	}
 
-	private void routeClient(final Map<String, Object> params) throws HTTPException {
+	private void routeClient(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
 
 		if (clientView == null) {
 			clientView = new ClientViewImpl();
 		}
 
-		int id = 0;
-		try {
-			id = Integer.parseInt((String) params.get("id"));
-		} catch (final NumberFormatException e) {
-			throw new HTTPException(404, "File not found.");
-		}
-
-		response = new ClientPresenterImpl(clientView, Client.findById(id)).go();
+		new ClientPresenterImpl(clientView).go(request);
 
 	}
 
-	private void routeOrderList() throws HTTPException {
+	private void routeOrderList(final HttpExchange request) throws HTTPException, IOException {
 
 		if (orderListView == null) {
 			orderListView = new OrderListViewImpl();
 		}
 
-		response = new OrderListPresenterImpl(orderListView, Order.findAll()).go();
+		new OrderListPresenterImpl(orderListView).go(request);
 
 	}
 
-	private void routeProductList() throws HTTPException {
+	private void routeProductList(final HttpExchange request) throws HTTPException, IOException {
 
 		if (productListView == null) {
 			productListView = new ProductListViewImpl();
 		}
 
-		response = new ProductListPresenterImpl(productListView, Product.findAll()).go();
+		new ProductListPresenterImpl(productListView).go(request);
 
 	}
 
-	private void routeClientList() throws HTTPException {
+	private void routeClientList(final HttpExchange request) throws HTTPException, IOException {
 
 		if (clientListView == null) {
 			clientListView = new ClientListViewImpl();
 		}
 
-		response = new ClientListPresenterImpl(clientListView, Client.findAll()).go();
+		new ClientListPresenterImpl(clientListView).go(request);
 
 	}
 
-	private void routeIndex() throws HTTPException {
+	private void routeIndex(final HttpExchange request) throws HTTPException, IOException {
 
 		if (indexView == null) {
 			indexView = new IndexViewImpl();
 		}
 
-		response = new IndexPresenterImpl(indexView).go();
+		new IndexPresenterImpl(indexView).go(request);
 
 	}
 

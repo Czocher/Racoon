@@ -1,25 +1,27 @@
 package org.czocher.raccoon.presenters.order.impl;
 
+import static org.czocher.raccoon.shortcuts.Shortcuts.Redirect;
+import static org.czocher.raccoon.shortcuts.Shortcuts.RenderViewToResponse;
+
 import java.util.List;
+import java.util.Map;
 
 import org.czocher.raccoon.HTTPException;
 import org.czocher.raccoon.models.Client;
+import org.czocher.raccoon.models.Order;
 import org.czocher.raccoon.presenters.order.OrderCreatePresenter;
 import org.czocher.raccoon.views.order.OrderCreateView;
+import org.czocher.raccoon.views.order.OrderView;
+
+import com.sun.net.httpserver.HttpExchange;
 
 public class OrderCreatePresenterImpl implements OrderCreatePresenter {
 
 	private OrderCreateView view;
 	private List<Client> clientList;
 
-	public OrderCreatePresenterImpl(final OrderCreateView orderCreateView, final List<Client> clientList) {
+	public OrderCreatePresenterImpl(final OrderCreateView orderCreateView) {
 		setView(orderCreateView);
-		setClientList(clientList);
-	}
-
-	@Override
-	public String go() throws HTTPException {
-		return view.render();
 	}
 
 	@Override
@@ -41,6 +43,40 @@ public class OrderCreatePresenterImpl implements OrderCreatePresenter {
 	@Override
 	public void setClientList(final List<Client> clientList) {
 		this.clientList = clientList;
+	}
+
+	@Override
+	public void go(final HttpExchange request) throws HTTPException {
+		@SuppressWarnings("unchecked")
+		final Map<String, Object> params = (Map<String, Object>) request.getAttribute("parameters");
+
+		if (request.getRequestMethod().equals("POST") || request.getRequestMethod().equals("GET") && params.containsKey("clientId")) {
+			if (!params.containsKey("clientId") || params.get("clientId") == null || params.get("clientId").toString().isEmpty()) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			int id = 0;
+			try {
+				id = Integer.parseInt((String) params.get("clientId"));
+			} catch (final NumberFormatException e) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			final Order o = new Order();
+			final Client c = Client.findById(id);
+
+			if (c == null) {
+				throw new HTTPException(400, "Bad request.");
+			}
+
+			c.addOrder(o);
+
+			Redirect("/" + OrderView.TAG + "?id=" + o.getId(), request);
+		} else {
+			setClientList(Client.findAll());
+			RenderViewToResponse(view, request);
+		}
+
 	}
 
 }

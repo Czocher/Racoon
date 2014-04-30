@@ -20,7 +20,14 @@
 	</form>
 	<script>
 		$(document).ready(new function(){
-			$("#form").validate();
+			$("#form").validate({
+				rules: {
+					quantity: {
+						required: true,
+						number: true
+					}
+				}
+			});
 		});
 	</script>
 </@m.template>

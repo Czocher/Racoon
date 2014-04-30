@@ -1,5 +1,7 @@
 package org.czocher.raccoon.presenters.product.impl;
 
+import static org.czocher.raccoon.shortcuts.Shortcuts.RenderViewToResponse;
+
 import java.util.List;
 
 import org.czocher.raccoon.HTTPException;
@@ -7,19 +9,15 @@ import org.czocher.raccoon.models.Product;
 import org.czocher.raccoon.presenters.product.ProductListPresenter;
 import org.czocher.raccoon.views.product.ProductListView;
 
+import com.sun.net.httpserver.HttpExchange;
+
 public class ProductListPresenterImpl implements ProductListPresenter {
 
 	private List<Product> productList;
 	private ProductListView view;
 
-	public ProductListPresenterImpl(final ProductListView view, final List<Product> productList) {
+	public ProductListPresenterImpl(final ProductListView view) {
 		setView(view);
-		setProductList(productList);
-	}
-
-	@Override
-	public String go() throws HTTPException {
-		return view.render();
 	}
 
 	@Override
@@ -41,6 +39,12 @@ public class ProductListPresenterImpl implements ProductListPresenter {
 	public void setView(final ProductListView view) {
 		this.view = view;
 		view.setPresenter(this);
+	}
+
+	@Override
+	public void go(final HttpExchange request) throws HTTPException {
+		setProductList(Product.findAll());
+		RenderViewToResponse(view, request);
 	}
 
 }
