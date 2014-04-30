@@ -73,7 +73,12 @@ public class OrderCreatePresenterImpl implements OrderCreatePresenter {
 
 			Redirect("/" + OrderView.TAG + "?id=" + o.getId(), request);
 		} else {
-			setClientList(Client.findAll());
+			final List<Client> c = Client.findAll();
+			if (c.isEmpty()) {
+				throw new HTTPException(400, "There are no clients specified");
+			}
+
+			setClientList(c);
 			RenderViewToResponse(view, request);
 		}
 

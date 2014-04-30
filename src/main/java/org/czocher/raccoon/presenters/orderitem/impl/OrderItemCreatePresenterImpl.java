@@ -109,7 +109,11 @@ public class OrderItemCreatePresenterImpl implements OrderItemCreatePresenter {
 			}
 
 			setOrderId(orderId);
-			setProductList(Product.findAll());
+			final List<Product> p = Product.findAll();
+			if (p.isEmpty()) {
+				throw new HTTPException(400, "No products specified.");
+			}
+			setProductList(p);
 			RenderViewToResponse(view, request);
 		} else {
 			throw new HTTPException(400, "Bad request.");

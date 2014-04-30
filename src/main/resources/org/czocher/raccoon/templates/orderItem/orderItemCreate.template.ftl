@@ -1,6 +1,6 @@
 <#import "../master.template.ftl" as m>
 <@m.template>
-	<h1>New client</h1>
+	<h1>New order item</h1>
 	<form role="form" id="form" action="/${orderItemCreatePath}" method="post">
 		<div class="form-group">
 			<label class="sr-only" for="productId">Product name</label>
