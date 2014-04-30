@@ -108,8 +108,6 @@ class RequestHandler implements HttpHandler {
 
 	private void routeRequest(final HttpExchange request) throws IOException, HTTPException {
 		final String uri = request.getRequestURI().getRawPath();
-		@SuppressWarnings("unchecked")
-		final Map<String, Object> params = (Map<String, Object>) request.getAttribute("parameters");
 
 		if (uri.matches("^/" + IndexView.TAG)) {
 			routeIndex(request);
@@ -120,25 +118,25 @@ class RequestHandler implements HttpHandler {
 		} else if (uri.matches("^/" + OrderListView.TAG)) {
 			routeOrderList(request);
 		} else if (uri.matches("^/" + ClientView.TAG)) {
-			routeClient(request, params);
+			routeClient(request);
 		} else if (uri.matches("^/" + ProductView.TAG)) {
-			routeProduct(request, params);
+			routeProduct(request);
 		} else if (uri.matches("^/" + OrderView.TAG)) {
-			routeOrder(request, params);
+			routeOrder(request);
 		} else if (uri.matches("^/" + OrderItemView.TAG)) {
-			routeOrderItem(request, params);
+			routeOrderItem(request);
 		} else if (uri.matches("^/" + ClientCreateView.TAG)) {
-			routeClientCreate(request, params);
+			routeClientCreate(request);
 		} else if (uri.matches("^/" + ProductCreateView.TAG)) {
-			routeProductCreate(request, params);
+			routeProductCreate(request);
 		} else if (uri.matches("^/" + OrderCreateView.TAG)) {
-			routeOrderCreate(request, params);
+			routeOrderCreate(request);
 		} else if (uri.matches("^/" + OrderItemCreateView.TAG)) {
-			routeOrderItemCreate(request, params);
+			routeOrderItemCreate(request);
 		} else if (uri.matches("^/" + ClientDeleteView.TAG)) {
-			routeClientDelete(request, params);
+			routeClientDelete(request);
 		} else if (uri.matches("^/" + OrderDeleteView.TAG)) {
-			routeOrderDelete(request, params);
+			routeOrderDelete(request);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
@@ -146,7 +144,7 @@ class RequestHandler implements HttpHandler {
 		System.out.println("Request for " + uri + " handled: " + request.getResponseCode());
 	}
 
-	private void routeOrderDelete(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+	private void routeOrderDelete(final HttpExchange request) throws HTTPException {
 		if (orderDeleteView == null) {
 			orderDeleteView = new OrderDeleteViewImpl();
 		}
@@ -155,7 +153,7 @@ class RequestHandler implements HttpHandler {
 
 	}
 
-	private void routeClientDelete(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
+	private void routeClientDelete(final HttpExchange request) throws HTTPException, IOException {
 		if (clientDeleteView == null) {
 			clientDeleteView = new ClientDeleteViewImpl();
 		}
@@ -163,7 +161,7 @@ class RequestHandler implements HttpHandler {
 		new ClientDeletePresenterImpl(clientDeleteView).go(request);
 	}
 
-	private void routeOrderItemCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
+	private void routeOrderItemCreate(final HttpExchange request) throws HTTPException, IOException {
 
 		if (orderItemCreateView == null) {
 			orderItemCreateView = new OrderItemCreateViewImpl();
@@ -173,7 +171,7 @@ class RequestHandler implements HttpHandler {
 
 	}
 
-	private void routeOrderCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+	private void routeOrderCreate(final HttpExchange request) throws HTTPException {
 
 		if (orderCreateView == null) {
 			orderCreateView = new OrderCreateViewImpl();
@@ -182,7 +180,7 @@ class RequestHandler implements HttpHandler {
 		new OrderCreatePresenterImpl(orderCreateView).go(request);
 	}
 
-	private void routeProductCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+	private void routeProductCreate(final HttpExchange request) throws HTTPException {
 
 		if (productCreateView == null) {
 			productCreateView = new ProductCreateViewImpl();
@@ -191,7 +189,7 @@ class RequestHandler implements HttpHandler {
 		new ProductCreatePresenterImpl(productCreateView).go(request);
 	}
 
-	private void routeClientCreate(final HttpExchange request, final Map<String, Object> params) throws HTTPException {
+	private void routeClientCreate(final HttpExchange request) throws HTTPException {
 
 		if (clientCreateView == null) {
 			clientCreateView = new ClientCreateViewImpl();
@@ -200,7 +198,7 @@ class RequestHandler implements HttpHandler {
 		new ClientCreatePresenterImpl(clientCreateView).go(request);
 	}
 
-	private void routeOrderItem(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
+	private void routeOrderItem(final HttpExchange request) throws HTTPException, IOException {
 
 		if (orderItemView == null) {
 			orderItemView = new OrderItemViewImpl();
@@ -210,7 +208,7 @@ class RequestHandler implements HttpHandler {
 
 	}
 
-	private void routeOrder(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
+	private void routeOrder(final HttpExchange request) throws HTTPException, IOException {
 
 		if (orderView == null) {
 			orderView = new OrderViewImpl();
@@ -220,7 +218,7 @@ class RequestHandler implements HttpHandler {
 
 	}
 
-	private void routeProduct(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
+	private void routeProduct(final HttpExchange request) throws HTTPException, IOException {
 
 		if (productView == null) {
 			productView = new ProductViewImpl();
@@ -230,7 +228,7 @@ class RequestHandler implements HttpHandler {
 
 	}
 
-	private void routeClient(final HttpExchange request, final Map<String, Object> params) throws HTTPException, IOException {
+	private void routeClient(final HttpExchange request) throws HTTPException, IOException {
 
 		if (clientView == null) {
 			clientView = new ClientViewImpl();
