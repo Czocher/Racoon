@@ -7,24 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.client.ClientPresenter;
-import org.czocher.raccoon.views.client.ClientDeleteView;
+import org.czocher.raccoon.presenters.client.ClientEditPresenter;
 import org.czocher.raccoon.views.client.ClientEditView;
-import org.czocher.raccoon.views.client.ClientView;
-import org.czocher.raccoon.views.order.OrderCreateView;
-import org.czocher.raccoon.views.order.OrderView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ClientViewImpl implements ClientView {
+public class ClientEditViewImpl implements ClientEditView {
 
-	private ClientPresenter presenter;
+	private ClientEditPresenter presenter;
 	private Template template;
 
-	public ClientViewImpl() {
+	public ClientEditViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("client/client.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("client/clientEdit.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -36,11 +32,7 @@ public class ClientViewImpl implements ClientView {
 		final Map<String, Object> values = new HashMap<>();
 
 		values.put("client", presenter.getClient());
-
-		values.put("clientDeletePath", ClientDeleteView.TAG);
 		values.put("clientEditPath", ClientEditView.TAG);
-		values.put("orderPath", OrderView.TAG);
-		values.put("orderCreatePath", OrderCreateView.TAG);
 
 		try {
 			template.process(values, out);
@@ -52,12 +44,12 @@ public class ClientViewImpl implements ClientView {
 	}
 
 	@Override
-	public ClientPresenter getPresenter() {
+	public ClientEditPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final ClientPresenter presenter) {
+	public void setPresenter(final ClientEditPresenter presenter) {
 		this.presenter = presenter;
 	}
 

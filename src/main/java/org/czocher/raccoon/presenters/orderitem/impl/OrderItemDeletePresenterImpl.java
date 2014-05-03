@@ -41,7 +41,7 @@ public class OrderItemDeletePresenterImpl implements OrderItemDeletePresenter {
 
 		int id = 0;
 		try {
-			id = Integer.parseInt((String) params.get("id"));
+			id = Integer.parseInt(params.get("id").toString());
 		} catch (final NumberFormatException e) {
 			throw new HTTPException(400, "Bad request.");
 		}

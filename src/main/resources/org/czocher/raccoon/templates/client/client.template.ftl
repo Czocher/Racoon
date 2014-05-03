@@ -1,6 +1,6 @@
 <#import "../master.template.ftl" as m>
 <@m.template>
-	<h1>Client #${client.id} <a class="delete" href="/${clientDeletePath}?id=${client.id}"><span class="glyphicon glyphicon-trash"></span> </a></h1>
+	<h1>Client #${client.id} <a class="delete" href="/${clientDeletePath}?id=${client.id}"><span class="glyphicon glyphicon-trash"></span> </a><a class="delete" href="/${clientEditPath}?id=${client.id}"><span class="glyphicon glyphicon-pencil"></span> </a></h1>
 	<ul>
 		<li>Name: ${client.name}</li>
 	</ul>

@@ -80,9 +80,9 @@ public class OrderItemCreatePresenterImpl implements OrderItemCreatePresenter {
 			int orderId = 0;
 			int quantity = 0;
 			try {
-				productId = Integer.parseInt((String) params.get("productId"));
-				orderId = Integer.parseInt((String) params.get("orderId"));
-				quantity = Integer.parseInt((String) params.get("quantity"));
+				productId = Integer.parseInt(params.get("productId").toString());
+				orderId = Integer.parseInt(params.get("orderId").toString());
+				quantity = Integer.parseInt(params.get("quantity").toString());
 			} catch (final NumberFormatException e) {
 				throw new HTTPException(400, "Bad request.");
 			}
@@ -103,7 +103,7 @@ public class OrderItemCreatePresenterImpl implements OrderItemCreatePresenter {
 
 			int orderId = 0;
 			try {
-				orderId = Integer.parseInt((String) params.get("orderId"));
+				orderId = Integer.parseInt(params.get("orderId").toString());
 			} catch (final NumberFormatException e) {
 				throw new HTTPException(400, "Bad request.");
 			}

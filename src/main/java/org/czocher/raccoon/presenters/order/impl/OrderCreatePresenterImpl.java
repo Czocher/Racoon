@@ -57,7 +57,7 @@ public class OrderCreatePresenterImpl implements OrderCreatePresenter {
 
 			int id = 0;
 			try {
-				id = Integer.parseInt((String) params.get("clientId"));
+				id = Integer.parseInt(params.get("clientId").toString());
 			} catch (final NumberFormatException e) {
 				throw new HTTPException(400, "Bad request.");
 			}
