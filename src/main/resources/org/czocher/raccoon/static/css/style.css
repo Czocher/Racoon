@@ -32,7 +32,7 @@ html,body,.container {
 	cursor: pointer;
 }
 
-.delete {
+.operation {
 	float: right;
 	padding-left: 0.5em;
 }
