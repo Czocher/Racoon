@@ -42,7 +42,7 @@ public class OrderDeletePresenterImpl implements OrderDeletePresenter {
 		int id = 0;
 		try {
 			id = Integer.parseInt(params.get("id").toString());
-		} catch (final NumberFormatException e) {
+		} catch (final NumberFormatException | NullPointerException e) {
 			throw new HTTPException(400, "Bad request.");
 		}
 

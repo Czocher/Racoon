@@ -83,7 +83,7 @@ public class OrderItemCreatePresenterImpl implements OrderItemCreatePresenter {
 				productId = Integer.parseInt(params.get("productId").toString());
 				orderId = Integer.parseInt(params.get("orderId").toString());
 				quantity = Integer.parseInt(params.get("quantity").toString());
-			} catch (final NumberFormatException e) {
+			} catch (final NumberFormatException | NullPointerException e) {
 				throw new HTTPException(400, "Bad request.");
 			}
 
