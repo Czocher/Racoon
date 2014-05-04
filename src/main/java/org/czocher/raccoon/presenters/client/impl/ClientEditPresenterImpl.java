@@ -49,7 +49,6 @@ public class ClientEditPresenterImpl implements ClientEditPresenter {
 		@SuppressWarnings("unchecked")
 		final Map<String, Object> params = (Map<String, Object>) request.getAttribute("parameters");
 
-		System.out.println(params);
 		int id = 0;
 		try {
 			id = Integer.parseInt(params.get("id").toString());
