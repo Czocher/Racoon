@@ -3,7 +3,7 @@
 	<h1>New product</h1>
 	<form role="form" id="form" action="/${productCreatePath}" method="post">
 		<div class="form-group">
-			<label class="sr-only" for="name">Product name</label>
+			<label for="name">Product name</label>
 			<input type="text" class="form-control" id="name" name="name"
 				placeholder="Enter product name" required>
 		</div>

@@ -3,7 +3,7 @@
 	<h1>New client</h1>
 	<form role="form" id="form" action="/${clientCreatePath}" method="post">
 		<div class="form-group">
-			<label class="sr-only" for="name">Client name</label>
+			<label for="name">Client name</label>
 			<input type="text" class="form-control" id="name" name="name"
 				placeholder="Enter client name" required>
 		</div>

@@ -19,6 +19,7 @@ import org.czocher.raccoon.presenters.order.impl.OrderListPresenterImpl;
 import org.czocher.raccoon.presenters.order.impl.OrderPresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemCreatePresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemDeletePresenterImpl;
+import org.czocher.raccoon.presenters.orderitem.impl.OrderItemEditPresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemPresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductCreatePresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductDeletePresenterImpl;
@@ -48,9 +49,11 @@ import org.czocher.raccoon.views.order.impl.OrderListViewImpl;
 import org.czocher.raccoon.views.order.impl.OrderViewImpl;
 import org.czocher.raccoon.views.orderitem.OrderItemCreateView;
 import org.czocher.raccoon.views.orderitem.OrderItemDeleteView;
+import org.czocher.raccoon.views.orderitem.OrderItemEditView;
 import org.czocher.raccoon.views.orderitem.OrderItemView;
 import org.czocher.raccoon.views.orderitem.impl.OrderItemCreateViewImpl;
 import org.czocher.raccoon.views.orderitem.impl.OrderItemDeleteViewImpl;
+import org.czocher.raccoon.views.orderitem.impl.OrderItemEditViewImpl;
 import org.czocher.raccoon.views.orderitem.impl.OrderItemViewImpl;
 import org.czocher.raccoon.views.product.ProductCreateView;
 import org.czocher.raccoon.views.product.ProductDeleteView;
@@ -88,6 +91,7 @@ class RequestHandler implements HttpHandler {
 	private OrderItemDeleteView orderItemDeleteView;
 	private ClientEditViewImpl clientEditView;
 	private OrderEditViewImpl orderEditView;
+	private OrderItemEditViewImpl orderItemEditView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -161,11 +165,21 @@ class RequestHandler implements HttpHandler {
 			routeClientEdit(request);
 		} else if (uri.matches("^/" + OrderEditView.TAG)) {
 			routeOrderEdit(request);
+		} else if (uri.matches("^/" + OrderItemEditView.TAG)) {
+			routeOrderItemEdit(request);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
 
 		System.out.println("Request for " + uri + " handled: " + request.getResponseCode());
+	}
+
+	private void routeOrderItemEdit(final HttpExchange request) throws HTTPException {
+		if (orderItemEditView == null) {
+			orderItemEditView = new OrderItemEditViewImpl();
+		}
+
+		new OrderItemEditPresenterImpl(orderItemEditView).go(request);
 	}
 
 	private void routeOrderEdit(final HttpExchange request) throws HTTPException {

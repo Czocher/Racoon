@@ -7,25 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.orderitem.OrderItemPresenter;
-import org.czocher.raccoon.views.client.ClientView;
-import org.czocher.raccoon.views.order.OrderView;
-import org.czocher.raccoon.views.orderitem.OrderItemDeleteView;
+import org.czocher.raccoon.presenters.orderitem.OrderItemEditPresenter;
 import org.czocher.raccoon.views.orderitem.OrderItemEditView;
-import org.czocher.raccoon.views.orderitem.OrderItemView;
-import org.czocher.raccoon.views.product.ProductView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class OrderItemViewImpl implements OrderItemView {
+public class OrderItemEditViewImpl implements OrderItemEditView {
 
-	private OrderItemPresenter presenter;
+	private OrderItemEditPresenter presenter;
 	private Template template;
 
-	public OrderItemViewImpl() {
+	public OrderItemEditViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("orderItem/orderItem.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("orderItem/orderItemEdit.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -37,13 +32,8 @@ public class OrderItemViewImpl implements OrderItemView {
 		final Map<String, Object> values = new HashMap<>();
 
 		values.put("orderItem", presenter.getOrderItem());
-
+		values.put("productList", presenter.getProductList());
 		values.put("orderItemEditPath", OrderItemEditView.TAG);
-		values.put("orderItemDeletePath", OrderItemDeleteView.TAG);
-
-		values.put("productPath", ProductView.TAG);
-		values.put("orderPath", OrderView.TAG);
-		values.put("clientPath", ClientView.TAG);
 
 		try {
 			template.process(values, out);
@@ -55,12 +45,12 @@ public class OrderItemViewImpl implements OrderItemView {
 	}
 
 	@Override
-	public OrderItemPresenter getPresenter() {
+	public OrderItemEditPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final OrderItemPresenter presenter) {
+	public void setPresenter(final OrderItemEditPresenter presenter) {
 		this.presenter = presenter;
 	}
 

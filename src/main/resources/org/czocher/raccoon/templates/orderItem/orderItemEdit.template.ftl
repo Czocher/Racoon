@@ -1,7 +1,7 @@
 <#import "../master.template.ftl" as m>
 <@m.template>
-	<h1>New order item</h1>
-	<form role="form" id="form" action="/${orderItemCreatePath}" method="post">
+	<h1>Edit order item</h1>
+	<form role="form" id="form" action="/${orderItemEditPath}" method="post">
 		<div class="form-group">
 			<label for="productId">Product name</label>
 			<select class="form-control" id="productId" name="productId">
@@ -13,9 +13,9 @@
 		<div class="form-group">
 			<label for="quantity">Quantity</label>
 			<input type="text" class="form-control" id="quantity" name="quantity"
-				placeholder="Enter product quantity" required>
+				placeholder="Enter product quantity" required value="${orderItem.quantity}">
 		</div>
-		<input type="hidden" id="orderId" name="orderId" value="${orderId}" />
+		<input type="hidden" id="id" name="id" value="${orderItem.id}" />
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>
 	<script>
