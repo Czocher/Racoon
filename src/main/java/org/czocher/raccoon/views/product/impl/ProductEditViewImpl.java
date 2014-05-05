@@ -7,22 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.czocher.raccoon.AppDriver;
-import org.czocher.raccoon.presenters.product.ProductPresenter;
-import org.czocher.raccoon.views.product.ProductDeleteView;
+import org.czocher.raccoon.presenters.product.ProductEditPresenter;
 import org.czocher.raccoon.views.product.ProductEditView;
-import org.czocher.raccoon.views.product.ProductView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ProductViewImpl implements ProductView {
+public class ProductEditViewImpl implements ProductEditView {
 
-	private ProductPresenter presenter;
+	private ProductEditPresenter presenter;
 	private Template template;
 
-	public ProductViewImpl() {
+	public ProductEditViewImpl() {
 		try {
-			template = AppDriver.TEMPL.getTemplate("product/product.template.ftl");
+			template = AppDriver.TEMPL.getTemplate("product/productEdit.template.ftl");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -33,9 +31,8 @@ public class ProductViewImpl implements ProductView {
 		final Writer out = new StringWriter();
 		final Map<String, Object> values = new HashMap<>();
 
-		values.put("productEditPath", ProductEditView.TAG);
-		values.put("productDeletePath", ProductDeleteView.TAG);
 		values.put("product", presenter.getProduct());
+		values.put("productEditPath", ProductEditView.TAG);
 
 		try {
 			template.process(values, out);
@@ -47,12 +44,12 @@ public class ProductViewImpl implements ProductView {
 	}
 
 	@Override
-	public ProductPresenter getPresenter() {
+	public ProductEditPresenter getPresenter() {
 		return presenter;
 	}
 
 	@Override
-	public void setPresenter(final ProductPresenter presenter) {
+	public void setPresenter(final ProductEditPresenter presenter) {
 		this.presenter = presenter;
 	}
 

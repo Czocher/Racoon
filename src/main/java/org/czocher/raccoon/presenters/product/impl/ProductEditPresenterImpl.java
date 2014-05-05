@@ -1,4 +1,4 @@
-package org.czocher.raccoon.presenters.client.impl;
+package org.czocher.raccoon.presenters.product.impl;
 
 import static org.czocher.raccoon.shortcuts.Shortcuts.Redirect;
 import static org.czocher.raccoon.shortcuts.Shortcuts.RenderViewToResponse;
@@ -6,39 +6,39 @@ import static org.czocher.raccoon.shortcuts.Shortcuts.RenderViewToResponse;
 import java.util.Map;
 
 import org.czocher.raccoon.HTTPException;
-import org.czocher.raccoon.models.Client;
-import org.czocher.raccoon.presenters.client.ClientEditPresenter;
-import org.czocher.raccoon.views.client.ClientEditView;
-import org.czocher.raccoon.views.client.ClientView;
+import org.czocher.raccoon.models.Product;
+import org.czocher.raccoon.presenters.product.ProductEditPresenter;
+import org.czocher.raccoon.views.product.ProductEditView;
+import org.czocher.raccoon.views.product.ProductView;
 
 import com.sun.net.httpserver.HttpExchange;
 
-public class ClientEditPresenterImpl implements ClientEditPresenter {
+public class ProductEditPresenterImpl implements ProductEditPresenter {
 
-	private Client client;
-	private ClientEditView view;
+	private Product product;
+	private ProductEditView view;
 
-	public ClientEditPresenterImpl(final ClientEditView clientEditView) {
-		setView(clientEditView);
+	public ProductEditPresenterImpl(final ProductEditView productEditView) {
+		setView(productEditView);
 	}
 
 	@Override
-	public Client getClient() {
-		return client;
+	public Product getProduct() {
+		return product;
 	}
 
 	@Override
-	public void setClient(final Client client) {
-		this.client = client;
+	public void setProduct(final Product product) {
+		this.product = product;
 	}
 
 	@Override
-	public ClientEditView getView() {
+	public ProductEditView getView() {
 		return view;
 	}
 
 	@Override
-	public void setView(final ClientEditView view) {
+	public void setView(final ProductEditView view) {
 		this.view = view;
 		view.setPresenter(this);
 	}
@@ -55,12 +55,12 @@ public class ClientEditPresenterImpl implements ClientEditPresenter {
 			throw new HTTPException(404, "File not found.");
 		}
 
-		final Client c = Client.findById(id);
+		final Product c = Product.findById(id);
 		if (c == null) {
 			throw new HTTPException(404, "File not found.");
 		}
 
-		setClient(c);
+		setProduct(c);
 
 		if (request.getRequestMethod().equals("POST")) {
 
@@ -70,7 +70,7 @@ public class ClientEditPresenterImpl implements ClientEditPresenter {
 			c.setName(params.get("name").toString());
 			c.saveIt();
 
-			Redirect("/" + ClientView.TAG, request);
+			Redirect("/" + ProductView.TAG, request);
 		} else {
 			RenderViewToResponse(view, request);
 		}

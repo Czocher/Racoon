@@ -23,6 +23,7 @@ import org.czocher.raccoon.presenters.orderitem.impl.OrderItemEditPresenterImpl;
 import org.czocher.raccoon.presenters.orderitem.impl.OrderItemPresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductCreatePresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductDeletePresenterImpl;
+import org.czocher.raccoon.presenters.product.impl.ProductEditPresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductListPresenterImpl;
 import org.czocher.raccoon.presenters.product.impl.ProductPresenterImpl;
 import org.czocher.raccoon.views.client.ClientCreateView;
@@ -57,10 +58,12 @@ import org.czocher.raccoon.views.orderitem.impl.OrderItemEditViewImpl;
 import org.czocher.raccoon.views.orderitem.impl.OrderItemViewImpl;
 import org.czocher.raccoon.views.product.ProductCreateView;
 import org.czocher.raccoon.views.product.ProductDeleteView;
+import org.czocher.raccoon.views.product.ProductEditView;
 import org.czocher.raccoon.views.product.ProductListView;
 import org.czocher.raccoon.views.product.ProductView;
 import org.czocher.raccoon.views.product.impl.ProductCreateViewImpl;
 import org.czocher.raccoon.views.product.impl.ProductDeleteViewImpl;
+import org.czocher.raccoon.views.product.impl.ProductEditViewImpl;
 import org.czocher.raccoon.views.product.impl.ProductListViewImpl;
 import org.czocher.raccoon.views.product.impl.ProductViewImpl;
 import org.javalite.activejdbc.Base;
@@ -89,9 +92,10 @@ class RequestHandler implements HttpHandler {
 	private OrderDeleteView orderDeleteView;
 	private ProductDeleteView productDeleteView;
 	private OrderItemDeleteView orderItemDeleteView;
-	private ClientEditViewImpl clientEditView;
-	private OrderEditViewImpl orderEditView;
-	private OrderItemEditViewImpl orderItemEditView;
+	private ClientEditView clientEditView;
+	private OrderEditView orderEditView;
+	private OrderItemEditView orderItemEditView;
+	private ProductEditView productEditView;
 
 	@Override
 	public void handle(final HttpExchange request) throws IOException {
@@ -167,11 +171,21 @@ class RequestHandler implements HttpHandler {
 			routeOrderEdit(request);
 		} else if (uri.matches("^/" + OrderItemEditView.TAG)) {
 			routeOrderItemEdit(request);
+		} else if (uri.matches("^/" + ProductEditView.TAG)) {
+			routeProductEdit(request);
 		} else {
 			throw new HTTPException(404, "File not found.");
 		}
 
 		System.out.println("Request for " + uri + " handled: " + request.getResponseCode());
+	}
+
+	private void routeProductEdit(final HttpExchange request) throws HTTPException {
+		if (productEditView == null) {
+			productEditView = new ProductEditViewImpl();
+		}
+
+		new ProductEditPresenterImpl(productEditView).go(request);
 	}
 
 	private void routeOrderItemEdit(final HttpExchange request) throws HTTPException {
